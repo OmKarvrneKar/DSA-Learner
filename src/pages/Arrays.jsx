@@ -28,26 +28,26 @@ function BinarySearchViz() {
     const newHistory = []
     
     // Initial state
-    newHistory.push({ lo, hi, mid: null, found: null, done: false, msg: \`Looking for \${searchTarget} in array. Initial search space: [0...\${hi}]\`, line: 1 })
+    newHistory.push({ lo, hi, mid: null, found: null, done: false, msg: `Looking for ${searchTarget} in array. Initial search space: [0...${hi}]`, line: 1 })
     
     while (lo <= hi) {
       const mid = Math.floor((lo + hi) / 2)
-      newHistory.push({ lo, hi, mid, found: null, done: false, msg: \`Calculate mid = (\${lo} + \${hi}) / 2 = \${mid}\`, line: 3 })
+      newHistory.push({ lo, hi, mid, found: null, done: false, msg: `Calculate mid = (${lo} + ${hi}) / 2 = ${mid}`, line: 3 })
       
       if (searchArr[mid] === searchTarget) {
-        newHistory.push({ lo, hi, mid, found: mid, done: true, msg: \`✅ Found \${searchTarget} at index \${mid}!\`, line: 5 })
+        newHistory.push({ lo, hi, mid, found: mid, done: true, msg: `✅ Found ${searchTarget} at index ${mid}!`, line: 5 })
         break
       } else if (searchArr[mid] < searchTarget) {
-        newHistory.push({ lo, hi, mid, found: null, done: false, msg: \`arr[\${mid}] (\${searchArr[mid]}) < \${searchTarget}, so search RIGHT half.\`, line: 7 })
+        newHistory.push({ lo, hi, mid, found: null, done: false, msg: `arr[${mid}] (${searchArr[mid]}) < ${searchTarget}, so search RIGHT half.`, line: 7 })
         lo = mid + 1
       } else {
-        newHistory.push({ lo, hi, mid, found: null, done: false, msg: \`arr[\${mid}] (\${searchArr[mid]}) > \${searchTarget}, so search LEFT half.\`, line: 9 })
+        newHistory.push({ lo, hi, mid, found: null, done: false, msg: `arr[${mid}] (${searchArr[mid]}) > ${searchTarget}, so search LEFT half.`, line: 9 })
         hi = mid - 1
       }
     }
     
     if (lo > hi) {
-      newHistory.push({ lo, hi, mid: null, found: -1, done: true, msg: \`❌ \${searchTarget} not found. Search space is empty.\`, line: 10 })
+      newHistory.push({ lo, hi, mid: null, found: -1, done: true, msg: `❌ ${searchTarget} not found. Search space is empty.`, line: 10 })
     }
     
     setHistory(newHistory)
@@ -150,12 +150,12 @@ function BinarySearchViz() {
                       key={i} 
                       initial={{ scale: 0.8, opacity: 0 }}
                       animate={{ scale: 1, opacity: isEliminated ? 0.2 : 1 }}
-                      className={\`relative w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg transition-colors duration-300 \${
+                      className={`relative w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg transition-colors duration-300 ${
                         isFound ? 'bg-emerald-500/20 text-emerald-400 border-2 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]' :
                         isMid ? 'bg-amber-500/20 text-amber-400 border-2 border-amber-500/50' :
                         inRange ? 'bg-indigo-500/10 text-white border border-indigo-500/30' :
                         'bg-white/5 text-[var(--text-muted)] border border-transparent'
-                      }\`}
+                      }`}
                     >
                       {val}
                       
@@ -182,7 +182,7 @@ function BinarySearchViz() {
             </div>
 
             {/* Status Message */}
-            <div className={\`p-4 rounded-xl border flex items-start gap-3 transition-colors \${curr.found !== null ? (curr.found !== -1 ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-100' : 'bg-rose-500/10 border-rose-500/20 text-rose-100') : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-100'}\`}>
+            <div className={`p-4 rounded-xl border flex items-start gap-3 transition-colors ${curr.found !== null ? (curr.found !== -1 ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-100' : 'bg-rose-500/10 border-rose-500/20 text-rose-100') : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-100'}`}>
               {curr.found !== null ? (curr.found !== -1 ? <CheckCircle2 size={20} className="text-emerald-400 shrink-0 mt-0.5" /> : <AlertCircle size={20} className="text-rose-400 shrink-0 mt-0.5" />) : <Eye size={20} className="text-indigo-400 shrink-0 mt-0.5" />}
               <p className="font-medium text-sm">{curr.msg}</p>
             </div>
@@ -194,7 +194,7 @@ function BinarySearchViz() {
               <Code2 size={12} /> Execution Trace
             </div>
             {pseudoCode.map((line, idx) => (
-              <div key={idx} className={\`px-2 py-1 rounded transition-colors \${curr.line === idx ? 'bg-indigo-500/20 text-indigo-300 border-l-2 border-indigo-500' : 'text-[var(--text-muted)] border-l-2 border-transparent'}\`}>
+              <div key={idx} className={`px-2 py-1 rounded transition-colors ${curr.line === idx ? 'bg-indigo-500/20 text-indigo-300 border-l-2 border-indigo-500' : 'text-[var(--text-muted)] border-l-2 border-transparent'}`}>
                 {line.replace(/ /g, '\\u00a0')}
               </div>
             ))}
@@ -262,7 +262,7 @@ function TwoPointerViz() {
   const target = 10
   const [left, setLeft] = useState(0)
   const [right, setRight] = useState(arr.length - 1)
-  const [status, setStatus] = useState(\`Find two numbers that sum to \${target}\`)
+  const [status, setStatus] = useState(`Find two numbers that sum to ${target}`)
   const [found, setFound] = useState(false)
   const [done, setDone] = useState(false)
 
@@ -270,19 +270,19 @@ function TwoPointerViz() {
     if (done) { setStatus('Press Reset to start again'); return }
     const sum = arr[left] + arr[right]
     if (sum === target) {
-      setStatus(\`✅ Found! arr[\${left}] (\${arr[left]}) + arr[\${right}] (\${arr[right]}) = \${target}\`)
+      setStatus(`✅ Found! arr[${left}] (${arr[left]}) + arr[${right}] (${arr[right]}) = ${target}`)
       setFound(true); setDone(true)
     } else if (sum < target) {
-      setStatus(\`Sum \${sum} < \${target}, move LEFT pointer right to increase sum.\`)
+      setStatus(`Sum ${sum} < ${target}, move LEFT pointer right to increase sum.`)
       setLeft(l => l + 1)
     } else {
-      setStatus(\`Sum \${sum} > \${target}, move RIGHT pointer left to decrease sum.\`)
+      setStatus(`Sum ${sum} > ${target}, move RIGHT pointer left to decrease sum.`)
       setRight(r => r - 1)
     }
-    if (left >= right - 1 && sum !== target) { setDone(true); setStatus(\`No pair found\`) }
+    if (left >= right - 1 && sum !== target) { setDone(true); setStatus(`No pair found`) }
   }
 
-  function reset() { setLeft(0); setRight(arr.length - 1); setStatus(\`Find two numbers that sum to \${target}\`); setFound(false); setDone(false) }
+  function reset() { setLeft(0); setRight(arr.length - 1); setStatus(`Find two numbers that sum to ${target}`); setFound(false); setDone(false) }
 
   return (
     <div className="card !p-0 overflow-hidden bg-[var(--bg-elevated)] border-[var(--border-subtle)] mt-6">
@@ -301,11 +301,11 @@ function TwoPointerViz() {
                   <motion.div 
                     layout
                     key={i} 
-                    className={\`relative w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg transition-colors duration-300 \${
+                    className={`relative w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg transition-colors duration-300 ${
                       isF ? 'bg-emerald-500/20 text-emerald-400 border-2 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]' :
                       (isL || isR) ? 'bg-indigo-500/20 text-indigo-400 border-2 border-indigo-500/50' :
                       'bg-white/5 text-[var(--text-muted)] border border-transparent'
-                    }\`}
+                    }`}
                   >
                     {v}
                     {isL && !isF && (
@@ -324,7 +324,7 @@ function TwoPointerViz() {
             </AnimatePresence>
           </div>
           
-          <div className={\`p-4 rounded-xl border flex items-start gap-3 transition-colors \${found ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-100' : done ? 'bg-rose-500/10 border-rose-500/20 text-rose-100' : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-100'}\`}>
+          <div className={`p-4 rounded-xl border flex items-start gap-3 transition-colors ${found ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-100' : done ? 'bg-rose-500/10 border-rose-500/20 text-rose-100' : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-100'}`}>
             {found ? <CheckCircle2 size={20} className="text-emerald-400 shrink-0 mt-0.5" /> : done ? <AlertCircle size={20} className="text-rose-400 shrink-0 mt-0.5" /> : <Eye size={20} className="text-indigo-400 shrink-0 mt-0.5" />}
             <p className="font-medium text-sm">{status}</p>
           </div>
@@ -338,7 +338,7 @@ function TwoPointerViz() {
 }
 
 const codes = {
-  Python: \`# Binary Search
+  Python: `# Binary Search
 def binary_search(arr, target):
     lo, hi = 0, len(arr) - 1
     while lo <= hi:
@@ -362,8 +362,8 @@ def two_sum_sorted(arr, target):
             left += 1
         else:
             right -= 1
-    return None\`,
-  JavaScript: \`// Binary Search
+    return None`,
+  JavaScript: `// Binary Search
 function binarySearch(arr, target) {
   let lo = 0, hi = arr.length - 1;
   while (lo <= hi) {
@@ -385,8 +385,8 @@ function twoSumSorted(arr, target) {
     else right--;
   }
   return null;
-}\`,
-  'C++': \`#include <vector>
+}`,
+  'C++': `#include <vector>
 using namespace std;
 
 // Binary Search
@@ -411,7 +411,7 @@ pair<int,int> twoSumSorted(vector<int>& arr, int target) {
         else right--;
     }
     return {-1, -1};
-}\`,
+}`,
 }
 
 const problems = [
@@ -464,7 +464,7 @@ export default function Arrays() {
                 ].map((row, i) => (
                   <tr key={i} className="hover:bg-white/5 transition-colors">
                     <td className="py-3 pr-4 text-white font-medium">{row.op}</td>
-                    <td className={\`py-3 pr-4 font-mono font-bold \${row.color}\`}>{row.time}</td>
+                    <td className={`py-3 pr-4 font-mono font-bold ${row.color}`}>{row.time}</td>
                     <td className="py-3 text-[var(--text-muted)]">{row.notes}</td>
                   </tr>
                 ))}
