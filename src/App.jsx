@@ -55,7 +55,7 @@ function Sidebar({ open, onClose, onSearch }) {
       <div className={`overlay ${open ? 'show' : ''}`} onClick={onClose} />
       <nav className={`sidebar ${open ? 'open' : ''}`}>
         <div className="sidebar-logo">
-          <h1>🧠 DSA Master</h1>
+          <h1>🧠 DSA Master Pro</h1>
           <p>Learn Data Structures & Algorithms</p>
         </div>
 
