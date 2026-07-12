@@ -67,9 +67,41 @@ code, pre, .mono-font {
    LAYOUT UTILS
 ========================================================= */
 
+/* Ambient Background Light Blobs */
+.ambient-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  z-index: -1;
+  pointer-events: none;
+  animation: float 20s infinite ease-in-out alternate;
+}
+.ambient-blob.primary {
+  width: 500px;
+  height: 500px;
+  background: var(--accent-primary);
+  top: -100px;
+  right: -100px;
+  animation-delay: -5s;
+}
+.ambient-blob.secondary {
+  width: 400px;
+  height: 400px;
+  background: var(--accent-secondary);
+  bottom: -100px;
+  left: -100px;
+}
+@keyframes float {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, 50px) scale(1.1); }
+  100% { transform: translate(-50px, 100px) scale(0.9); }
+}
+
 .layout {
   display: flex;
   min-height: 100vh;
+  position: relative;
   overflow: hidden;
 }
 

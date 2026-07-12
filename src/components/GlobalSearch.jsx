@@ -59,7 +59,7 @@ export default function GlobalSearch({ open, onClose }) {
   // Helper to highlight matching text
   const HighlightMatch = ({ text, q }) => {
     if (!q) return text
-    const parts = text.split(new RegExp(\`(\${q})\`, 'gi'))
+    const parts = text.split(new RegExp(`(${q})`, 'gi'))
     return (
       <span>
         {parts.map((p, i) => 
@@ -113,7 +113,7 @@ export default function GlobalSearch({ open, onClose }) {
                       const Icon = typeIcon[r.type] || BookOpen
                       return (
                         <div key={i} 
-                          className={\`search-item \${i === selected ? 'selected' : ''}\`}
+                          className={`search-item ${i === selected ? 'selected' : ''}`}
                           onClick={() => go(r.path, r.title)} 
                           onMouseEnter={() => setSelected(i)}
                         >

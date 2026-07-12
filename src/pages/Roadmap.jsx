@@ -24,7 +24,7 @@ const STAGES = [
       { path: '/arrays', icon: Box, label: 'Arrays & Strings', key: 'arrays', why: 'Foundation for all DSA. Master index access, two pointers, sliding window.' },
       { path: '/stacks', icon: Layers, label: 'Stacks', key: 'stacks', why: 'Understand LIFO, call stack, balanced brackets, undo operations.' },
       { path: '/queues', icon: ListOrdered, label: 'Queues', key: 'queues', why: 'Master FIFO for BFS, task scheduling, level-order processing.' },
-      { path: '/linked-list', icon: Link2, label: 'Linked Lists', key: 'linked-list', why: 'Pointers, traversal, reversal, cycle detection with Floyd\\'s algorithm.' },
+      { path: '/linked-list', icon: Link2, label: 'Linked Lists', key: 'linked-list', why: "Pointers, traversal, reversal, cycle detection with Floyd's algorithm." },
       { path: '/big-o', icon: Zap, label: 'Big-O Notation', key: null, why: 'Understand time & space complexity — essential for every interview.' },
     ]
   },
@@ -102,8 +102,8 @@ export default function Roadmap() {
         
         <div className="flex flex-col md:flex-row gap-4">
           {STAGES.map((s, i) => (
-            <div key={i} className={\`flex-1 p-4 rounded-xl border bg-black/20 \${s.border} \${s.glow}\`}>
-              <div className={\`flex items-center gap-2 font-bold mb-1 \${s.color}\`}>
+            <div key={i} className={`flex-1 p-4 rounded-xl border bg-black/20 ${s.border} ${s.glow}`}>
+              <div className={`flex items-center gap-2 font-bold mb-1 ${s.color}`}>
                 <s.icon size={16} /> {s.level}
               </div>
               <div className="text-xs text-[var(--text-muted)] font-mono uppercase tracking-wider">{s.time}</div>
@@ -125,10 +125,10 @@ export default function Roadmap() {
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-100px" }}
-              className={\`relative transition-all duration-500 \${!unlocked ? 'opacity-50 grayscale' : ''}\`}
+              className={`relative transition-all duration-500 ${!unlocked ? 'opacity-50 grayscale' : ''}`}
             >
               {/* Stage Marker */}
-              <div className={\`absolute -left-[45px] md:-left-[61px] top-0 w-12 h-12 rounded-full border-4 border-[#06080F] flex items-center justify-center z-10 transition-colors duration-500 \${unlocked ? stage.bg + ' ' + stage.color + ' ' + stage.border : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] border-[var(--border-subtle)]'}\`}>
+              <div className={`absolute -left-[45px] md:-left-[61px] top-0 w-12 h-12 rounded-full border-4 border-[#06080F] flex items-center justify-center z-10 transition-colors duration-500 ${unlocked ? stage.bg + ' ' + stage.color + ' ' + stage.border : 'bg-[var(--bg-elevated)] text-[var(--text-muted)] border-[var(--border-subtle)]'}`}>
                 {unlocked ? <StageIcon size={20} /> : <Lock size={18} />}
               </div>
 
@@ -138,7 +138,7 @@ export default function Roadmap() {
                 onClick={() => setActiveStage(activeStage === si ? -1 : si)}
               >
                 <div>
-                  <h3 className={\`text-xl font-bold \${unlocked ? stage.color : 'text-[var(--text-muted)]'}\`}>
+                  <h3 className={`text-xl font-bold ${unlocked ? stage.color : 'text-[var(--text-muted)]'}`}>
                     Stage {si + 1}: {stage.level}
                   </h3>
                   <p className="text-sm text-[var(--text-muted)] mt-1">{stage.desc}</p>
@@ -166,10 +166,10 @@ export default function Roadmap() {
                         const Icon = t.icon
                         
                         return (
-                          <div key={t.path} className={\`relative flex p-4 rounded-xl border transition-all duration-300 \${done ? 'bg-emerald-500/5 border-emerald-500/30' : unlocked ? 'bg-[var(--bg-elevated)] border-[var(--border-subtle)] hover:border-indigo-500/40 hover:bg-white/5' : 'bg-transparent border-transparent'}\`}>
+                          <div key={t.path} className={`relative flex p-4 rounded-xl border transition-all duration-300 ${done ? 'bg-emerald-500/5 border-emerald-500/30' : unlocked ? 'bg-[var(--bg-elevated)] border-[var(--border-subtle)] hover:border-indigo-500/40 hover:bg-white/5' : 'bg-transparent border-transparent'}`}>
                             
                             {/* Topic Status Icon */}
-                            <div className={\`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 mr-4 transition-colors \${done ? 'bg-emerald-500/20 text-emerald-400' : unlocked ? stage.bg + ' ' + stage.color : 'bg-white/5 text-[var(--text-muted)]'}\`}>
+                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 mr-4 transition-colors ${done ? 'bg-emerald-500/20 text-emerald-400' : unlocked ? stage.bg + ' ' + stage.color : 'bg-white/5 text-[var(--text-muted)]'}`}>
                               {done ? <CheckCircle size={20} /> : <Icon size={20} />}
                             </div>
                             
@@ -184,7 +184,7 @@ export default function Roadmap() {
                                 )}
                                 {done && <span className="text-[10px] uppercase tracking-wider font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">Done</span>}
                               </div>
-                              <p className={\`text-xs leading-relaxed \${unlocked ? 'text-[var(--text-muted)]' : 'text-white/30'}\`}>
+                              <p className={`text-xs leading-relaxed ${unlocked ? 'text-[var(--text-muted)]' : 'text-white/30'}`}>
                                 {t.why}
                               </p>
                             </div>

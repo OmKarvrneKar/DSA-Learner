@@ -8,24 +8,39 @@ import {
 } from 'lucide-react'
 import { AppProvider } from './context/AppContext'
 import GlobalSearch from './components/GlobalSearch'
-import Home from './pages/Home'
-import Arrays from './pages/Arrays'
-import LinkedList from './pages/LinkedList'
-import Stacks from './pages/Stacks'
-import Queues from './pages/Queues'
-import Trees from './pages/Trees'
-import Graphs from './pages/Graphs'
-import Sorting from './pages/Sorting'
-import DynamicProgramming from './pages/DynamicProgramming'
-import Greedy from './pages/Greedy'
-import Backtracking from './pages/Backtracking'
-import Tries from './pages/Tries'
-import Heaps from './pages/Heaps'
-import Interview from './pages/Interview'
-import BigO from './pages/BigO'
-import Roadmap from './pages/Roadmap'
-import Playground from './pages/Playground'
-import Progress from './pages/Progress'
+import { lazy, Suspense } from 'react'
+
+// Lazy loaded routes for bundle optimization
+const Home = lazy(() => import('./pages/Home'))
+const Arrays = lazy(() => import('./pages/Arrays'))
+const LinkedList = lazy(() => import('./pages/LinkedList'))
+const Stacks = lazy(() => import('./pages/Stacks'))
+const Queues = lazy(() => import('./pages/Queues'))
+const Trees = lazy(() => import('./pages/Trees'))
+const Graphs = lazy(() => import('./pages/Graphs'))
+const Sorting = lazy(() => import('./pages/Sorting'))
+const DynamicProgramming = lazy(() => import('./pages/DynamicProgramming'))
+const Greedy = lazy(() => import('./pages/Greedy'))
+const Backtracking = lazy(() => import('./pages/Backtracking'))
+const Tries = lazy(() => import('./pages/Tries'))
+const Heaps = lazy(() => import('./pages/Heaps'))
+const Interview = lazy(() => import('./pages/Interview'))
+const BigO = lazy(() => import('./pages/BigO'))
+const Roadmap = lazy(() => import('./pages/Roadmap'))
+const Playground = lazy(() => import('./pages/Playground'))
+const Progress = lazy(() => import('./pages/Progress'))
+
+// Loading Skeleton
+const PageSkeleton = () => (
+  <div className="content animate-pulse">
+    <div className="w-48 h-10 bg-white/10 rounded-xl mb-4"></div>
+    <div className="w-96 h-4 bg-white/5 rounded-md mb-8"></div>
+    <div className="grid gap-6">
+      <div className="h-48 bg-white/5 rounded-2xl border border-white/10"></div>
+      <div className="h-64 bg-white/5 rounded-2xl border border-white/10"></div>
+    </div>
+  </div>
+)
 import './index.css'
 
 const navItems = [
@@ -175,6 +190,10 @@ function AppInner() {
 
   return (
     <div className="layout">
+      {/* Ambient Lighting Blobs */}
+      <div className="ambient-blob primary" />
+      <div className="ambient-blob secondary" />
+
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} onSearch={() => setSearchOpen(true)} />
       <main className="main">
         <TopBar onMenu={() => setSidebarOpen(true)} onSearch={() => setSearchOpen(true)} />
@@ -186,26 +205,28 @@ function AppInner() {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
           >
-            <Routes location={location}>
-              <Route path="/" element={<Home />} />
-              <Route path="/arrays" element={<Arrays />} />
-              <Route path="/linked-list" element={<LinkedList />} />
-              <Route path="/stacks" element={<Stacks />} />
-              <Route path="/queues" element={<Queues />} />
-              <Route path="/trees" element={<Trees />} />
-              <Route path="/graphs" element={<Graphs />} />
-              <Route path="/sorting" element={<Sorting />} />
-              <Route path="/dp" element={<DynamicProgramming />} />
-              <Route path="/greedy" element={<Greedy />} />
-              <Route path="/backtracking" element={<Backtracking />} />
-              <Route path="/tries" element={<Tries />} />
-              <Route path="/heaps" element={<Heaps />} />
-              <Route path="/interview" element={<Interview />} />
-              <Route path="/big-o" element={<BigO />} />
-              <Route path="/roadmap" element={<Roadmap />} />
-              <Route path="/playground" element={<Playground />} />
-              <Route path="/progress" element={<Progress />} />
-            </Routes>
+            <Suspense fallback={<PageSkeleton />}>
+              <Routes location={location}>
+                <Route path="/" element={<Home />} />
+                <Route path="/arrays" element={<Arrays />} />
+                <Route path="/linked-list" element={<LinkedList />} />
+                <Route path="/stacks" element={<Stacks />} />
+                <Route path="/queues" element={<Queues />} />
+                <Route path="/trees" element={<Trees />} />
+                <Route path="/graphs" element={<Graphs />} />
+                <Route path="/sorting" element={<Sorting />} />
+                <Route path="/dp" element={<DynamicProgramming />} />
+                <Route path="/greedy" element={<Greedy />} />
+                <Route path="/backtracking" element={<Backtracking />} />
+                <Route path="/tries" element={<Tries />} />
+                <Route path="/heaps" element={<Heaps />} />
+                <Route path="/interview" element={<Interview />} />
+                <Route path="/big-o" element={<BigO />} />
+                <Route path="/roadmap" element={<Roadmap />} />
+                <Route path="/playground" element={<Playground />} />
+                <Route path="/progress" element={<Progress />} />
+              </Routes>
+            </Suspense>
           </motion.div>
         </AnimatePresence>
       </main>

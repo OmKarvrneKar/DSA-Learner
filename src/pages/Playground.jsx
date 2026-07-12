@@ -139,10 +139,10 @@ export default function Playground() {
         const end = performance.now()
         
         let out = logs.join('\\n') || '(no output)'
-        out += \`\\n\\n✨ Execution finished in \${(end - start).toFixed(2)}ms\`
+        out += `\n\n✨ Execution finished in ${(end - start).toFixed(2)}ms`
         setOutput(out)
       } catch (e) {
-        setErrorMsg(\`Error: \${e.message}\\n\${e.stack}\`)
+        setErrorMsg(`Error: ${e.message}\n${e.stack}`)
         setActiveTab('problems')
       }
       setRunning(false)
@@ -159,7 +159,7 @@ export default function Playground() {
   const monacoLang = { JavaScript: 'javascript', Python: 'python', 'C++': 'cpp' }[lang]
 
   return (
-    <div className={\`\${isFullscreen ? 'fixed inset-0 z-[200] bg-[var(--bg-base)] flex flex-col p-4' : 'content'}\`} style={!isFullscreen ? { maxWidth: 1200 } : {}}>
+    <div className={`${isFullscreen ? 'fixed inset-0 z-[200] bg-[var(--bg-base)] flex flex-col p-4' : 'content'}`} style={!isFullscreen ? { maxWidth: 1200 } : {}}>
       
       {!isFullscreen && (
         <div className="mb-6">
@@ -178,7 +178,7 @@ export default function Playground() {
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
           {Object.keys(TEMPLATES).map(l => (
             <button key={l} 
-              className={\`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap \${lang === l ? 'bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30' : 'text-[var(--text-muted)] hover:bg-white/5 hover:text-white border border-transparent'}\`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap ${lang === l ? 'bg-[var(--accent-primary)]/15 text-[var(--accent-primary)] border border-[var(--accent-primary)]/30' : 'text-[var(--text-muted)] hover:bg-white/5 hover:text-white border border-transparent'}`}
               onClick={() => changeLanguage(l)}
             >
               <Cpu size={14} /> {l}
@@ -213,7 +213,7 @@ export default function Playground() {
             <button 
               onClick={runCode} 
               disabled={running}
-              className={\`ml-2 flex items-center gap-2 px-5 py-1.5 rounded-lg text-sm font-semibold transition-all \${running ? 'bg-indigo-500/50 cursor-not-allowed text-white/50' : 'bg-[var(--accent-gradient)] text-white hover:shadow-lg hover:shadow-indigo-500/20 hover:-translate-y-0.5'}\`}
+              className={`ml-2 flex items-center gap-2 px-5 py-1.5 rounded-lg text-sm font-semibold transition-all ${running ? 'bg-indigo-500/50 cursor-not-allowed text-white/50' : 'bg-[var(--accent-gradient)] text-white hover:shadow-lg hover:shadow-indigo-500/20 hover:-translate-y-0.5'}`}
             >
               <Play size={14} className={running ? 'animate-pulse' : ''} /> {running ? 'Running...' : 'Run Code'}
             </button>
@@ -225,9 +225,9 @@ export default function Playground() {
         </div>
       </div>
 
-      <div className={\`flex flex-col lg:flex-row gap-4 \${isFullscreen ? 'flex-1 overflow-hidden mt-4' : ''}\`}>
+      <div className={`flex flex-col lg:flex-row gap-4 ${isFullscreen ? 'flex-1 overflow-hidden mt-4' : ''}`}>
         {/* Editor Container */}
-        <div className={\`border-x border-b border-[var(--border-subtle)] bg-[#0d1117] rounded-b-xl overflow-hidden \${isFullscreen ? 'flex-1 h-full' : 'h-[500px] lg:flex-[2]'}\`}>
+        <div className={`border-x border-b border-[var(--border-subtle)] bg-[#0d1117] rounded-b-xl overflow-hidden ${isFullscreen ? 'flex-1 h-full' : 'h-[500px] lg:flex-[2]'}`}>
           <Editor
             language={monacoLang}
             value={code}
@@ -252,7 +252,7 @@ export default function Playground() {
         </div>
 
         {/* Output/Input Panels */}
-        <div className={\`flex flex-col bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-xl overflow-hidden \${isFullscreen ? 'flex-1 h-full' : 'h-[500px] lg:flex-1'}\`}>
+        <div className={`flex flex-col bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-xl overflow-hidden ${isFullscreen ? 'flex-1 h-full' : 'h-[500px] lg:flex-1'}`}>
           {/* Panel Tabs */}
           <div className="flex border-b border-[var(--border-subtle)] bg-black/20">
             {[
@@ -262,7 +262,7 @@ export default function Playground() {
             ].map(t => (
               <button key={t.id}
                 onClick={() => setActiveTab(t.id)}
-                className={\`flex items-center gap-2 px-4 py-3 text-xs font-semibold tracking-wide uppercase transition-colors relative \${activeTab === t.id ? 'text-[var(--accent-primary)] bg-white/5' : 'text-[var(--text-muted)] hover:text-white hover:bg-white/5'}\`}
+                className={`flex items-center gap-2 px-4 py-3 text-xs font-semibold tracking-wide uppercase transition-colors relative ${activeTab === t.id ? 'text-[var(--accent-primary)] bg-white/5' : 'text-[var(--text-muted)] hover:text-white hover:bg-white/5'}`}
               >
                 <t.icon size={14} />
                 {t.label}
