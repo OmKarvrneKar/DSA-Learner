@@ -4,6 +4,110 @@ import { Box, ChevronRight } from 'lucide-react'
 import TopicHeader from '../components/TopicHeader'
 import { AlgorithmLesson } from '../components/AlgorithmLesson'
 import { VisualizerAPI } from '../engine/VisualizerAPI'
+import { useAnimationEngine } from '../engine/useAnimationEngine'
+import { ANIMATION_EVENTS } from '../engine/EventTypes'
+
+// ==========================================
+// BINARY SEARCH LOGIC & GENERATOR
+// ==========================================
+function generateBinarySearchTimeline(arr, target) {
+  const api = new VisualizerAPI(arr);
+  let lo = 0;
+  let hi = arr.length - 1;
+  let foundIdx = -1;
+
+  api.customEvent(ANIMATION_EVENTS.START, { line: 2, vars: { lo, hi, mid: '-' } }, null, 
+    `Initial search space: [0...${hi}]`,
+    {
+      what: "Setting up two pointers: 'lo' at the start and 'hi' at the end of the array.",
+      why: "We need boundaries to define which part of the array we are currently searching.",
+      tip: "Binary search ONLY works on sorted arrays. Always clarify if the array is sorted in an interview."
+    }
+  );
+
+  while (lo <= hi) {
+    let mid = Math.floor((lo + hi) / 2);
+    api.customEvent(ANIMATION_EVENTS.UPDATE_VARIABLE, { line: 3, vars: { lo, hi, mid } }, null, 
+      `Calculate mid = (${lo} + ${hi}) / 2 = ${mid}`,
+      {
+        what: `Calculated the midpoint index to be ${mid}.`,
+        why: "By checking the middle element, we can immediately discard half of our remaining search space.",
+        warning: "In languages like C++ or Java, (lo + hi) / 2 can cause integer overflow! Use lo + (hi - lo) / 2 instead."
+      }
+    );
+    
+    api.customEvent(ANIMATION_EVENTS.COMPARE, { line: 4, vars: { lo, hi, mid } }, null, 
+      `Comparing arr[${mid}] (${arr[mid]}) with target ${target}`,
+      {
+        what: `Checking if our target ${target} is exactly at the middle index ${mid}.`,
+        why: "If we're lucky, the middle element is exactly what we are looking for."
+      }
+    );
+    
+    if (arr[mid] === target) {
+      api.customEvent(ANIMATION_EVENTS.COMPLETE, { line: 5, vars: { lo, hi, mid } }, null, 
+        `✅ Found ${target} at index ${mid}!`,
+        {
+          what: `Match found! Returning the index ${mid}.`,
+          why: "The algorithm successfully completed its objective.",
+          tip: "O(log n) time complexity is achieved because we cut the problem size in half every step!"
+        }
+      );
+      foundIdx = mid;
+      break;
+    } else if (arr[mid] < target) {
+      api.customEvent(ANIMATION_EVENTS.UPDATE_VARIABLE, { line: 6, vars: { lo, hi, mid } }, null, 
+        `arr[${mid}] < ${target}, searching RIGHT half.`,
+        {
+          what: `The middle value ${arr[mid]} is smaller than our target ${target}.`,
+          why: "Because the array is sorted, everything to the left of 'mid' is also smaller. We can completely ignore the left half!"
+        }
+      );
+      lo = mid + 1;
+      api.customEvent(ANIMATION_EVENTS.MOVE_POINTER, { line: 7, vars: { lo, hi, mid } }, null, 
+        `Updated lo to ${lo}`,
+        {
+          what: `Moved the 'lo' pointer to mid + 1 (index ${lo}).`,
+          why: "We are now exclusively searching the right half of the remaining array."
+        }
+      );
+    } else {
+      api.customEvent(ANIMATION_EVENTS.UPDATE_VARIABLE, { line: 8, vars: { lo, hi, mid } }, null, 
+        `arr[${mid}] > ${target}, searching LEFT half.`,
+        {
+          what: `The middle value ${arr[mid]} is greater than our target ${target}.`,
+          why: "Because the array is sorted, everything to the right is also greater. We can ignore the right half."
+        }
+      );
+      hi = mid - 1;
+      api.customEvent(ANIMATION_EVENTS.MOVE_POINTER, { line: 9, vars: { lo, hi, mid } }, null, 
+        `Updated hi to ${hi}`,
+        {
+          what: `Moved the 'hi' pointer to mid - 1 (index ${hi}).`,
+          why: "We are now exclusively searching the left half of the remaining array."
+        }
+      );
+    }
+  }
+
+  if (foundIdx === -1) {
+    api.customEvent(ANIMATION_EVENTS.COMPLETE, { line: 10, vars: { lo, hi: hi, mid: '-' } }, null, 
+      `❌ ${target} not found. Search space empty.`,
+      {
+        what: "The 'lo' pointer has crossed the 'hi' pointer (lo > hi). The loop terminates.",
+        why: "A crossed pointer state means our search space has shrunk to 0 elements. The target does not exist.",
+        tip: "Returning -1 is standard practice when an element is not found."
+      }
+    );
+  }
+
+  return api.getTimeline();
+}
+
+function BinarySearchLesson() {
+  const arr = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91];
+  const target = 23;
+  const timeline = useMemo(() => generateBinarySearchTimeline(arr, target), []);
   const engine = useAnimationEngine(timeline, 800);
 
   const renderArray = (snapshot) => {
