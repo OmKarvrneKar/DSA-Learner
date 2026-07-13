@@ -217,40 +217,26 @@ public:
 };`,
 }
 
-self.head = self.head.next`;
-
-  return (
-    <AlgorithmLesson 
-      title="Linked Lists"
-      introduction="A linked list is a linear data structure, in which the elements are not stored at contiguous memory locations. Instead, elements are linked using pointers."
-      analogy="Think of a treasure hunt where each clue (Node) tells you exactly where to find the next clue. You can't just jump to clue #5 without reading 1, 2, 3, and 4 first!"
-      problemStatement="Watch a sequence of operations: Prepend, Append, and Delete Head, to understand how pointers are rewired during each operation."
-      engine={engine}
-      renderVisualization={renderLinkedList}
-      codeString={codeString}
-      variables={[
-        {name: 'head', desc: 'Points to first node'},
-        {name: 'curr', desc: 'Traversal pointer'},
-        {name: 'val', desc: 'Value to insert'}
-      ]}
-      complexity={{time: 'O(N) search', space: 'O(N)'}}
-      quiz={[
-        { question: 'Why is prepending to a linked list O(1) but appending is O(N)?', options: ['Appending requires checking every value', 'Prepending uses less memory', 'You must traverse from the head to find the tail to append', 'It depends on the language'], correct: 2 },
-        { question: 'What happens if you lose the head pointer?', options: ['The list reverses', 'The list becomes a tree', 'The garbage collector deletes the entire list from memory', 'You can find it using the tail pointer'], correct: 2 }
-      ]}
-      summary="Linked Lists excel at fast insertions and deletions at the head (O(1)), but suffer from slow random access and search times (O(N)) because they lack indices."
-      practiceProblems={[
-        { title: 'Reverse Linked List', difficulty: 'Easy', desc: 'Reverse a singly linked list iteratively and recursively.', hint: 'Use three pointers: prev, curr, next. Reassign curr.next = prev, then advance all three pointers forward.', link: 'https://leetcode.com/problems/reverse-linked-list/' },
-        { title: 'Detect Cycle in Linked List', difficulty: 'Easy', desc: 'Given head of a linked list, determine if it has a cycle.', hint: "Floyd's cycle detection: use two pointers — slow moves 1 step, fast moves 2 steps. If they meet, there's a cycle.", link: 'https://leetcode.com/problems/linked-list-cycle/' },
-        { title: 'Merge Two Sorted Lists', difficulty: 'Easy', desc: 'Merge two sorted linked lists and return the merged list.', hint: 'Use a dummy head node. Compare heads of both lists, attach the smaller one, and advance that pointer.', link: 'https://leetcode.com/problems/merge-two-sorted-lists/' }
-      ]}
-    />
-  )
-}
+const problems = [
+  { title: 'Reverse Linked List', difficulty: 'Easy', desc: 'Reverse a singly linked list iteratively and recursively.', hint: 'Use three pointers: prev, curr, next. Reassign curr.next = prev, then advance all three pointers forward.', link: 'https://leetcode.com/problems/reverse-linked-list/' },
+  { title: 'Detect Cycle in Linked List', difficulty: 'Easy', desc: 'Given head of a linked list, determine if it has a cycle.', hint: "Floyd's cycle detection: use two pointers — slow moves 1 step, fast moves 2 steps. If they meet, there's a cycle.", link: 'https://leetcode.com/problems/linked-list-cycle/' },
+  { title: 'Merge Two Sorted Lists', difficulty: 'Easy', desc: 'Merge two sorted linked lists and return the merged list.', hint: 'Use a dummy head node. Compare heads of both lists, attach the smaller one, and advance that pointer.', link: 'https://leetcode.com/problems/merge-two-sorted-lists/' },
+  { title: 'Remove Nth Node From End', difficulty: 'Medium', desc: 'Remove the nth node from the end of the list in one pass.', hint: 'Use two pointers. Move fast pointer n steps ahead, then move both until fast reaches the end. Slow pointer is now at the node before the target.', link: 'https://leetcode.com/problems/remove-nth-node-from-end-of-list/' },
+  { title: 'LRU Cache', difficulty: 'Hard', desc: 'Design a data structure that follows LRU cache eviction policy.', hint: 'Combine a HashMap (for O(1) lookup) with a doubly linked list (for O(1) insertion/deletion). Move accessed nodes to front.', link: 'https://leetcode.com/problems/lru-cache/' },
+]
 
 export default function LinkedList() {
   return (
     <div className="content">
+      <TopicHeader topic="linked-list" title="🔗 Linked Lists" subtitle="Dynamic data structure where each node points to the next. No index-based access — traversal is key." />
+
+      <div className="card">
+        <h2>📖 Core Concepts</h2>
+        <ul>
+          <li><strong style={{ color: 'var(--blue)' }}>Node</strong> — Contains data + a pointer to the next node.</li>
+          <li><strong style={{ color: 'var(--blue)' }}>Singly Linked</strong> — Each node has one pointer (next). <strong style={{ color: 'var(--blue)' }}>Doubly Linked</strong> — Each node has next + prev.</li>
+          <li><strong style={{ color: 'var(--blue)' }}>Prepend</strong> — O(1). <strong style={{ color: 'var(--blue)' }}>Append</strong> — O(n) unless tail pointer maintained.</li>
+          <li><strong style={{ color: 'var(--blue)' }}>Fast & Slow Pointers</strong> — Detect cycles, find middle, nth from end.</li>
           <li><strong style={{ color: 'var(--blue)' }}>Reverse</strong> — Three pointers: prev, curr, next. Rewire one node at a time.</li>
         </ul>
       </div>
@@ -285,3 +271,6 @@ export default function LinkedList() {
         <h2>🏋️ Practice Problems</h2>
         <ProblemList problems={problems} topic="linked-list" />
       </div>
+    </div>
+  )
+}
