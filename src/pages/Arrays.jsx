@@ -104,10 +104,11 @@ function generateBinarySearchTimeline(arr, target) {
   return api.getTimeline();
 }
 
+const BINARY_SEARCH_ARR = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91];
+const BINARY_SEARCH_TARGET = 23;
+
 function BinarySearchLesson() {
-  const arr = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91];
-  const target = 23;
-  const timeline = useMemo(() => generateBinarySearchTimeline(arr, target), [arr, target]);
+  const timeline = useMemo(() => generateBinarySearchTimeline(BINARY_SEARCH_ARR, BINARY_SEARCH_TARGET), []);
   const engine = useAnimationEngine(timeline, 800);
 
   const renderArray = (snapshot) => {
@@ -122,7 +123,7 @@ function BinarySearchLesson() {
             const isMid = vars?.mid === i;
             const inRange = i >= vars?.lo && i <= vars?.hi;
             const isEliminated = !inRange && !isDone;
-            const isFound = isDone && val === target && isMid; // hacky check for found
+            const isFound = isDone && val === BINARY_SEARCH_TARGET && isMid; // hacky check for found
             
             return (
               <motion.div 
