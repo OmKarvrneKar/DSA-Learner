@@ -7,7 +7,7 @@ import {
   Search, Menu, X, Command
 } from 'lucide-react'
 import { AppProvider } from './context/AppContext'
-import GlobalSearch from './components/GlobalSearch'
+import GlobalSearch from './components/common/GlobalSearch'
 import { lazy, Suspense } from 'react'
 
 // Lazy loaded routes for bundle optimization

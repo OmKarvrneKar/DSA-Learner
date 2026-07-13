@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import CodeBlock from '../components/CodeBlock'
-import ProblemList from '../components/ProblemList'
-import TopicHeader from '../components/TopicHeader'
+import CodeBlock from '../components/common/CodeBlock'
+import ProblemList from '../components/common/ProblemList'
+import TopicHeader from '../components/common/TopicHeader'
 
 function LLViz() {
   const [nodes, setNodes] = useState([10, 20, 30, 40])

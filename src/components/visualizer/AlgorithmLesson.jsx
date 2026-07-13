@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { BookOpen, Lightbulb, Code2, Cpu, CheckCircle2, Target, HelpCircle, Variable, Zap, MessageSquareWarning, AlertTriangle, GraduationCap, Flame, Keyboard } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AnimationControls } from './AnimationControls';
-import CodeBlock from './CodeBlock';
-import ProblemList from './ProblemList';
+import CodeBlock from '../common/CodeBlock';
+import ProblemList from '../common/ProblemList';
 import { VisualizationCanvas } from './VisualizationCanvas';
 
 /**

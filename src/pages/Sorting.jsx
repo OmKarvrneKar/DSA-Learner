@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
-import CodeBlock from '../components/CodeBlock'
-import ProblemList from '../components/ProblemList'
-import TopicHeader from '../components/TopicHeader'
+import CodeBlock from '../components/common/CodeBlock'
+import ProblemList from '../components/common/ProblemList'
+import TopicHeader from '../components/common/TopicHeader'
 
 const INIT = [64, 34, 25, 12, 22, 11, 90]
 
