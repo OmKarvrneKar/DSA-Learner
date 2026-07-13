@@ -2,32 +2,30 @@ import { ANIMATION_EVENTS } from './EventTypes';
 
 /**
  * VisualizerAPI captures state snapshots and events during algorithm execution.
- * Instead of algorithms modifying the UI directly, they use this API to build a timeline.
- * This completely decouples algorithm logic from presentation.
+ * Includes rich educational metadata for the storytelling engine.
  */
 export class VisualizerAPI {
   constructor(initialState) {
-    // Deep clone to avoid mutating references
     this.initialState = structuredClone(initialState);
     this.snapshots = [{
       step: 0,
       state: this.initialState,
       event: ANIMATION_EVENTS.START,
       payload: {},
-      message: "Algorithm started"
+      message: "Algorithm started",
+      instructor: {
+        what: "Initializing the data structure.",
+        why: "Every algorithm needs a starting point.",
+        tip: "Always ensure your base cases and initial boundaries are correct."
+      }
     }];
-    // Track the current working state during execution
     this.currentState = structuredClone(initialState);
   }
 
   /**
    * Generic method to record a snapshot
-   * @param {string} event - The ANIMATION_EVENT type
-   * @param {object} payload - Additional event data (e.g., indices, node ids)
-   * @param {function} stateModifier - A callback to mutate this.currentState
-   * @param {string} message - A description of the action for the UI
    */
-  addSnapshot(event, payload, stateModifier, message = "") {
+  addSnapshot(event, payload, stateModifier, message = "", instructor = {}) {
     if (stateModifier) {
       stateModifier(this.currentState);
     }
@@ -37,7 +35,8 @@ export class VisualizerAPI {
       state: structuredClone(this.currentState),
       event,
       payload,
-      message
+      message,
+      instructor // { what, why, tip, warning }
     });
   }
 
@@ -45,70 +44,69 @@ export class VisualizerAPI {
   // ARRAY EVENTS
   // ==========================================
   
-  compare(index1, index2, message = `Comparing index ${index1} and ${index2}`) {
-    this.addSnapshot(ANIMATION_EVENTS.COMPARE, { index1, index2 }, null, message);
+  compare(index1, index2, message, instructor) {
+    this.addSnapshot(ANIMATION_EVENTS.COMPARE, { index1, index2 }, null, message, instructor);
   }
 
-  swap(index1, index2, message = `Swapping index ${index1} and ${index2}`) {
+  swap(index1, index2, message, instructor) {
     this.addSnapshot(ANIMATION_EVENTS.SWAP, { index1, index2 }, (state) => {
-      // Assuming state is an array for this specific method
       const temp = state[index1];
       state[index1] = state[index2];
       state[index2] = temp;
-    }, message);
+    }, message, instructor);
   }
 
-  overwrite(index, value, message = `Setting index ${index} to ${value}`) {
+  overwrite(index, value, message, instructor) {
     this.addSnapshot(ANIMATION_EVENTS.OVERWRITE, { index, value }, (state) => {
       state[index] = value;
-    }, message);
+    }, message, instructor);
   }
   
   // ==========================================
   // GRAPH & TREE EVENTS
   // ==========================================
 
-  visitNode(nodeId, message = `Visiting node ${nodeId}`) {
-    this.addSnapshot(ANIMATION_EVENTS.VISIT_NODE, { nodeId }, null, message);
+  visitNode(nodeId, message, instructor) {
+    this.addSnapshot(ANIMATION_EVENTS.VISIT_NODE, { nodeId }, null, message, instructor);
   }
 
-  traverseEdge(fromNode, toNode, message = `Traversing from ${fromNode} to ${toNode}`) {
-     this.addSnapshot(ANIMATION_EVENTS.TRAVERSE_EDGE, { fromNode, toNode }, null, message);
+  traverseEdge(fromNode, toNode, message, instructor) {
+     this.addSnapshot(ANIMATION_EVENTS.TRAVERSE_EDGE, { fromNode, toNode }, null, message, instructor);
   }
   
-  highlight(nodeIds, message = `Highlighting nodes`) {
-    this.addSnapshot(ANIMATION_EVENTS.HIGHLIGHT, { nodeIds }, null, message);
+  highlight(nodeIds, message, instructor) {
+    this.addSnapshot(ANIMATION_EVENTS.HIGHLIGHT, { nodeIds }, null, message, instructor);
   }
 
   // ==========================================
   // STACK & QUEUE EVENTS
   // ==========================================
   
-  push(value, message = `Pushing ${value} to stack`) {
+  push(value, message, instructor) {
       this.addSnapshot(ANIMATION_EVENTS.PUSH, { value }, (state) => {
           state.push(value);
-      }, message);
+      }, message, instructor);
   }
 
-  pop(message = `Popping element from stack`) {
+  pop(message, instructor) {
       let poppedValue;
       this.addSnapshot(ANIMATION_EVENTS.POP, {}, (state) => {
           poppedValue = state.pop();
-      }, message);
+      }, message, instructor);
       return poppedValue; 
   }
 
-  enqueue(value, message = `Enqueueing ${value}`) {
+  enqueue(value, message, instructor) {
       this.addSnapshot(ANIMATION_EVENTS.ENQUEUE, { value }, (state) => {
           state.push(value);
-      }, message);
+      }, message, instructor);
   }
 
-  dequeue(message = `Dequeueing element`) {
+  dequeue(message, instructor) {
       let dequeuedValue;
       this.addSnapshot(ANIMATION_EVENTS.DEQUEUE, {}, (state) => {
           dequeuedValue = state.shift();
-      }, message);
+      }, message, instructor);
       return dequeuedValue;
   }
 
@@ -116,18 +114,16 @@ export class VisualizerAPI {
   // POINTERS & VARIABLES
   // ==========================================
   
-  movePointer(name, target, message = `Pointer ${name} moved to ${target}`) {
-    this.addSnapshot(ANIMATION_EVENTS.MOVE_POINTER, { name, target }, null, message);
+  movePointer(name, target, message, instructor) {
+    this.addSnapshot(ANIMATION_EVENTS.MOVE_POINTER, { name, target }, null, message, instructor);
   }
 
-  // Marks the algorithm as finished
-  complete(message = "Algorithm execution complete") {
-    this.addSnapshot(ANIMATION_EVENTS.COMPLETE, {}, null, message);
+  complete(message, instructor) {
+    this.addSnapshot(ANIMATION_EVENTS.COMPLETE, {}, null, message, instructor);
   }
 
-  // Generic custom event
-  customEvent(event, payload, stateModifier, message) {
-    this.addSnapshot(event, payload, stateModifier, message);
+  customEvent(event, payload, stateModifier, message, instructor) {
+    this.addSnapshot(event, payload, stateModifier, message, instructor);
   }
 
   getTimeline() {
