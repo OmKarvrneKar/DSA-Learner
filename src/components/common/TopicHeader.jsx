@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useApp } from '../context/AppContext'
+import { useApp } from '../../context/AppContext'
 import QuizModal from './QuizModal'
 
 export default function TopicHeader({ topic, title, subtitle, hasQuiz = true }) {
