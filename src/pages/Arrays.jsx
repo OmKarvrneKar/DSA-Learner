@@ -107,7 +107,7 @@ function generateBinarySearchTimeline(arr, target) {
 function BinarySearchLesson() {
   const arr = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91];
   const target = 23;
-  const timeline = useMemo(() => generateBinarySearchTimeline(arr, target), []);
+  const timeline = useMemo(() => generateBinarySearchTimeline(arr, target), [arr, target]);
   const engine = useAnimationEngine(timeline, 800);
 
   const renderArray = (snapshot) => {
