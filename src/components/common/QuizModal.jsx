@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { quizData } from '../data/quizData'
-import { useApp } from '../context/AppContext'
+import { quizData } from '../../data/quizData'
+import { useApp } from '../../context/AppContext'
 
 export default function QuizModal({ topic, onClose }) {
   const { setQuizScore } = useApp()

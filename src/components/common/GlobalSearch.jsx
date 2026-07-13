@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { searchData } from '../data/searchData'
+import { searchData } from '../../data/searchData'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Command, ArrowRight, Clock, BookOpen, Lightbulb, Target } from 'lucide-react'
 
