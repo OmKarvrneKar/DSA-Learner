@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { BookOpen, Lightbulb, Code2, Cpu, CheckCircle2, Target, HelpCircle, Variable, Zap, MessageSquareWarning, AlertTriangle, GraduationCap, Flame } from 'lucide-react';
+import { BookOpen, Lightbulb, Code2, Cpu, CheckCircle2, Target, HelpCircle, Variable, Zap, MessageSquareWarning, AlertTriangle, GraduationCap, Flame, Keyboard } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AnimationControls } from './AnimationControls';
 import CodeBlock from './CodeBlock';
 import ProblemList from './ProblemList';
+import { VisualizationCanvas } from './VisualizationCanvas';
 
 /**
  * A comprehensive, educational layout for any algorithm featuring a Live Instructor.
@@ -69,14 +70,20 @@ export function AlgorithmLesson({
         {/* Main Canvas */}
         <div className="xl:col-span-3 flex flex-col">
           {/* 4. Visualization & 5. Step-by-step animation */}
-          <div className="card !p-0 overflow-hidden bg-[var(--bg-elevated)] border-[var(--border-subtle)] flex-1 flex flex-col">
-            <div className="p-6 border-b border-[var(--border-subtle)] bg-black/20 min-h-[300px] flex items-center justify-center relative flex-1">
+          <div className="card !p-0 overflow-hidden bg-[var(--bg-elevated)] border border-[var(--border-subtle)] shadow-2xl flex-1 flex flex-col">
+            
+            <VisualizationCanvas>
                {totalSteps > 0 && renderVisualization(activeSnapshot)}
-            </div>
+            </VisualizationCanvas>
             
             {/* Controls block */}
-            <div className="p-4 bg-black/40 border-b border-[var(--border-subtle)]">
+            <div className="p-4 bg-black/40 border-b border-t border-[var(--border-subtle)] flex flex-col gap-3">
                <AnimationControls engine={engine} />
+               <div className="flex items-center justify-center gap-4 text-[10px] uppercase font-bold tracking-widest text-[var(--text-muted)]">
+                 <span className="flex items-center gap-1"><Keyboard size={12}/> Shortcuts:</span>
+                 <span><kbd className="bg-white/10 px-1.5 py-0.5 rounded border border-white/20">SPACE</kbd> Play/Pause</span>
+                 <span><kbd className="bg-white/10 px-1.5 py-0.5 rounded border border-white/20">←</kbd> <kbd className="bg-white/10 px-1.5 py-0.5 rounded border border-white/20">→</kbd> Step</span>
+               </div>
             </div>
 
             {/* 6. Code walkthrough & 7. Variable explanation */}
