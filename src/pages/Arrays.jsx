@@ -4,52 +4,6 @@ import { Box, ChevronRight } from 'lucide-react'
 import TopicHeader from '../components/TopicHeader'
 import { AlgorithmLesson } from '../components/AlgorithmLesson'
 import { VisualizerAPI } from '../engine/VisualizerAPI'
-import { useAnimationEngine } from '../engine/useAnimationEngine'
-import { ANIMATION_EVENTS } from '../engine/EventTypes'
-
-// ==========================================
-// BINARY SEARCH LOGIC & GENERATOR
-// ==========================================
-function generateBinarySearchTimeline(arr, target) {
-  const api = new VisualizerAPI(arr);
-  let lo = 0;
-  let hi = arr.length - 1;
-  let foundIdx = -1;
-
-  api.customEvent(ANIMATION_EVENTS.START, { line: 2, vars: { lo, hi, mid: '-' } }, null, `Initial search space: [0...${hi}]`);
-
-  while (lo <= hi) {
-    let mid = Math.floor((lo + hi) / 2);
-    api.customEvent(ANIMATION_EVENTS.UPDATE_VARIABLE, { line: 3, vars: { lo, hi, mid } }, null, `Calculate mid = (${lo} + ${hi}) / 2 = ${mid}`);
-    
-    api.customEvent(ANIMATION_EVENTS.COMPARE, { line: 4, vars: { lo, hi, mid } }, null, `Comparing arr[${mid}] (${arr[mid]}) with target ${target}`);
-    
-    if (arr[mid] === target) {
-      api.customEvent(ANIMATION_EVENTS.COMPLETE, { line: 5, vars: { lo, hi, mid } }, null, `✅ Found ${target} at index ${mid}!`);
-      foundIdx = mid;
-      break;
-    } else if (arr[mid] < target) {
-      api.customEvent(ANIMATION_EVENTS.UPDATE_VARIABLE, { line: 6, vars: { lo, hi, mid } }, null, `arr[${mid}] < ${target}, searching RIGHT half.`);
-      lo = mid + 1;
-      api.customEvent(ANIMATION_EVENTS.MOVE_POINTER, { line: 7, vars: { lo, hi, mid } }, null, `Updated lo to ${lo}`);
-    } else {
-      api.customEvent(ANIMATION_EVENTS.UPDATE_VARIABLE, { line: 8, vars: { lo, hi, mid } }, null, `arr[${mid}] > ${target}, searching LEFT half.`);
-      hi = mid - 1;
-      api.customEvent(ANIMATION_EVENTS.MOVE_POINTER, { line: 9, vars: { lo, hi, mid } }, null, `Updated hi to ${hi}`);
-    }
-  }
-
-  if (foundIdx === -1) {
-    api.customEvent(ANIMATION_EVENTS.COMPLETE, { line: 10, vars: { lo, hi: hi, mid: '-' } }, null, `❌ ${target} not found. Search space empty.`);
-  }
-
-  return api.getTimeline();
-}
-
-function BinarySearchLesson() {
-  const arr = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91];
-  const target = 23;
-  const timeline = useMemo(() => generateBinarySearchTimeline(arr, target), []);
   const engine = useAnimationEngine(timeline, 800);
 
   const renderArray = (snapshot) => {
