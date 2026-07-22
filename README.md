@@ -50,4 +50,3 @@ This project is open-source and available under the [MIT License](LICENSE).
 **Author**: Omkar Vernekar  
 GitHub: [@OmKarvrneKar](https://github.com/OmKarvrneKar)
 
-Happy Coding!
