@@ -5,6 +5,7 @@ An interactive web application designed to help learners understand, visualize, 
 ## 🚀 Features
 
 - **Interactive Visualizations**: Understand complex algorithms through intuitive step-by-step visual representations.
+- **Custom Animation Engine**: A sophisticated engine tailored for smooth, step-by-step algorithmic visualizations.
 - **Integrated Code Editor**: Write and run your own algorithms directly in the browser (powered by Monaco Editor).
 - **Learning Modules**: Structured learning paths to guide you from basic data structures to advanced algorithms.
 - **Modern & Fast**: Built with React and Vite for a blazing fast, responsive user experience.
