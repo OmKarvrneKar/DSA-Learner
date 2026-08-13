@@ -494,11 +494,223 @@ function ReverseStringLesson() {
   )
 }
 
+function ArrayOperationsLesson() {
+  const [arr, setArr] = useState([12, 24, 35, 48, 56]);
+  const [valInput, setValInput] = useState('');
+  const [idxInput, setIdxInput] = useState('');
+  const [status, setStatus] = useState('Array is ready. Try operations below.');
+  const [highlightIdx, setHighlightIdx] = useState(null);
+  const [shiftIdx, setShiftIdx] = useState(null);
+  const [newValIdx, setNewValIdx] = useState(null);
+
+  function handleSearch() {
+    const val = Number(valInput);
+    if (isNaN(val) || valInput.trim() === '') {
+      setStatus('Please enter a valid number to search.');
+      return;
+    }
+    setStatus(`Searching for ${val} sequentially...`);
+    let i = 0;
+    const interval = setInterval(() => {
+      setHighlightIdx(i);
+      if (arr[i] === val) {
+        clearInterval(interval);
+        setStatus(`✅ Found ${val} at index ${i} (O(n) time)`);
+        setTimeout(() => setHighlightIdx(null), 1200);
+        return;
+      }
+      i++;
+      if (i >= arr.length) {
+        clearInterval(interval);
+        setStatus(`❌ ${val} not found in the array (O(n) time)`);
+        setHighlightIdx(null);
+      }
+    }, 400);
+    setValInput('');
+  }
+
+  function handleUpdate() {
+    const val = Number(valInput);
+    const idx = Number(idxInput);
+    if (isNaN(val) || valInput.trim() === '') {
+      setStatus('Please enter a valid number to update.');
+      return;
+    }
+    if (isNaN(idx) || idxInput.trim() === '' || idx < 0 || idx >= arr.length) {
+      setStatus(`Please enter a valid index between 0 and ${arr.length - 1}.`);
+      return;
+    }
+    
+    setStatus(`Updating index ${idx} with ${val} — Direct Access (O(1) time)`);
+    setHighlightIdx(idx);
+    setTimeout(() => {
+      const newArr = [...arr];
+      newArr[idx] = val;
+      setArr(newArr);
+      setStatus(`✅ Updated index ${idx} to ${val}`);
+      setTimeout(() => setHighlightIdx(null), 1000);
+    }, 500);
+    setValInput('');
+    setIdxInput('');
+  }
+
+  function handleInsert() {
+    const val = Number(valInput) || Math.floor(Math.random() * 90 + 10);
+    let idx = idxInput.trim() === '' ? arr.length : Number(idxInput);
+    if (isNaN(idx) || idx < 0 || idx > arr.length) {
+      setStatus(`Please enter a valid index between 0 and ${arr.length}.`);
+      return;
+    }
+    if (arr.length >= 10) {
+      setStatus('❌ Simulation array limit reached (max 10 elements).');
+      return;
+    }
+
+    setStatus(`Inserting ${val} at index ${idx}. Elements from ${idx} must shift right!`);
+    
+    let currentArr = [...arr, null];
+    setArr(currentArr);
+    
+    let shiftPos = currentArr.length - 1;
+    const interval = setInterval(() => {
+      if (shiftPos > idx) {
+        currentArr[shiftPos] = currentArr[shiftPos - 1];
+        currentArr[shiftPos - 1] = null;
+        setArr([...currentArr]);
+        setShiftIdx(shiftPos);
+        setStatus(`Shifting ${currentArr[shiftPos]} from index ${shiftPos - 1} to index ${shiftPos}...`);
+        shiftPos--;
+      } else {
+        clearInterval(interval);
+        currentArr[idx] = val;
+        setArr([...currentArr]);
+        setNewValIdx(idx);
+        setShiftIdx(null);
+        setStatus(`✅ Inserted ${val} at index ${idx}. Shift completed (O(n) time)`);
+        setTimeout(() => setNewValIdx(null), 1000);
+      }
+    }, 500);
+
+    setValInput('');
+    setIdxInput('');
+  }
+
+  function handleDelete() {
+    let idx = Number(idxInput);
+    if (idxInput.trim() === '' || isNaN(idx) || idx < 0 || idx >= arr.length) {
+      setStatus(`Please enter a valid index between 0 and ${arr.length - 1}.`);
+      return;
+    }
+
+    setStatus(`Deleting element at index ${idx}. Elements from ${idx + 1} must shift left!`);
+    setHighlightIdx(idx);
+
+    let currentArr = [...arr];
+    setTimeout(() => {
+      currentArr[idx] = null;
+      setArr([...currentArr]);
+      setHighlightIdx(null);
+
+      let shiftPos = idx;
+      const interval = setInterval(() => {
+        if (shiftPos < currentArr.length - 1) {
+          currentArr[shiftPos] = currentArr[shiftPos + 1];
+          currentArr[shiftPos + 1] = null;
+          setArr([...currentArr]);
+          setShiftIdx(shiftPos);
+          setStatus(`Shifting ${currentArr[shiftPos]} from index ${shiftPos + 1} to index ${shiftPos}...`);
+          shiftPos++;
+        } else {
+          clearInterval(interval);
+          currentArr.pop();
+          setArr([...currentArr]);
+          setShiftIdx(null);
+          setStatus(`✅ Deletion at index ${idx} and shift completed (O(n) time)`);
+        }
+      }, 500);
+    }, 600);
+
+    setValInput('');
+    setIdxInput('');
+  }
+
+  return (
+    <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <div>
+        <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.5rem', fontWeight: 'bold', color: 'white', marginBottom: '8px' }}>
+          🛠 Array Operations Simulator
+        </h2>
+        <p style={{ color: 'var(--text-muted)' }}>
+          Arrays are contiguous blocks of memory. Unlike Linked Lists, elements are stored next to each other, meaning inserts/deletes require shifting subsequent elements in memory.
+        </p>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '12px 0' }}>
+        <div style={{ display: 'flex', border: '1px solid var(--border-subtle)', borderRadius: '12px', background: 'rgba(0, 0, 0, 0.2)', padding: '16px', overflowX: 'auto', maxWidth: '100%', gap: '8px' }}>
+          {arr.map((val, i) => {
+            const isHighlight = highlightIdx === i;
+            const isShift = shiftIdx === i;
+            const isNew = newValIdx === i;
+            return (
+              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ fontSize: '11px', color: '#818cf8', fontWeight: 'bold', marginBottom: '6px', fontFamily: 'monospace' }}>[{i}]</div>
+                <div 
+                  style={{
+                    width: '56px',
+                    height: '56px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                    borderRadius: '10px',
+                    backgroundColor: isNew ? 'rgba(16, 185, 129, 0.2)' : isHighlight ? 'rgba(245, 158, 11, 0.2)' : isShift ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255, 255, 255, 0.03)',
+                    border: isNew ? '2px solid rgba(16, 185, 129, 0.5)' : isHighlight ? '2px solid rgba(245, 158, 11, 0.5)' : isShift ? '2px solid rgba(99, 102, 241, 0.5)' : '1px solid rgba(255, 255, 255, 0.08)',
+                    boxShadow: isNew ? '0 0 12px rgba(16, 185, 129, 0.2)' : 'none',
+                    color: val === null ? 'transparent' : 'white',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  {val !== null ? val : ''}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+        <input
+          value={valInput} 
+          onChange={e => setValInput(e.target.value)}
+          placeholder="Value (e.g. 10)"
+          style={{ width: '130px', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--border-subtle)', background: 'rgba(0, 0, 0, 0.4)', color: 'white', fontSize: '0.875rem', outline: 'none' }}
+        />
+        <input
+          value={idxInput} 
+          onChange={e => setIdxInput(e.target.value)}
+          placeholder="Index (e.g. 2)"
+          style={{ width: '130px', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--border-subtle)', background: 'rgba(0, 0, 0, 0.4)', color: 'white', fontSize: '0.875rem', outline: 'none' }}
+        />
+        <button className="btn btn-primary" onClick={handleInsert} style={{ padding: '8px 16px' }}>Insert</button>
+        <button className="btn btn-secondary" onClick={handleDelete} style={{ padding: '8px 16px' }}>Delete</button>
+        <button className="btn" onClick={handleSearch} style={{ padding: '8px 16px', backgroundColor: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', color: '#34d399', cursor: 'pointer', borderRadius: '8px', fontWeight: 'bold' }}>Search</button>
+        <button className="btn" onClick={handleUpdate} style={{ padding: '8px 16px', backgroundColor: 'rgba(245, 158, 11, 0.15)', border: '1px solid rgba(245, 158, 11, 0.3)', color: '#fbbf24', cursor: 'pointer', borderRadius: '8px', fontWeight: 'bold' }}>Update</button>
+      </div>
+
+      <div className={`viz-status info`} style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid rgba(59, 130, 246, 0.2)', backgroundColor: 'rgba(59, 130, 246, 0.05)', color: '#93c5fd', fontSize: '0.875rem', fontFamily: 'monospace' }}>
+        {status}
+      </div>
+    </div>
+  );
+}
+
 export default function Arrays() {
   return (
     <div className="content">
       <TopicHeader topic="arrays" title="Arrays & Strings" subtitle="Interactive Lessons Powered by Animation Engine" icon={Box} />
       <div className="flex flex-col gap-12">
+        <ArrayOperationsLesson />
         <BinarySearchLesson />
         <ReverseStringLesson />
       </div>
