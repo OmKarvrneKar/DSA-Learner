@@ -595,3 +595,55 @@ code, pre, .mono-font {
 }
 .quiz-result { padding: 32px 24px; text-align: center; }
 .quiz-score-circle { display: flex; justify-content: center; margin-bottom: 24px; }
+
+/* =========================================================
+   LESSON LAYOUTS (ALGORITHM LESSON CLASS FIXES)
+========================================================= */
+.lesson-intro-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+@media (min-width: 768px) {
+  .lesson-intro-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.lesson-main-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+@media (min-width: 1280px) {
+  .lesson-main-grid {
+    grid-template-columns: 3fr 1fr;
+  }
+}
+
+.lesson-code-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-top: 1px solid var(--border-subtle);
+}
+@media (min-width: 1024px) {
+  .lesson-code-grid {
+    grid-template-columns: 2fr 1fr;
+    border-top: none;
+  }
+  .lesson-code-grid > :first-child {
+    border-right: 1px solid var(--border-subtle);
+  }
+}
+
+.lesson-complexity-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 640px) {
+  .lesson-complexity-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+

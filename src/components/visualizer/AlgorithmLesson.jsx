@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { BookOpen, Lightbulb, Code2, Cpu, CheckCircle2, Target, HelpCircle, Variable, Zap, MessageSquareWarning, AlertTriangle, GraduationCap, Flame, Keyboard } from 'lucide-react';
+import { BookOpen, Lightbulb, Code2, Cpu, CheckCircle2, Target, HelpCircle, Variable, Zap, AlertTriangle, GraduationCap, Flame, Keyboard } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AnimationControls } from './AnimationControls';
-import CodeBlock from '../common/CodeBlock';
 import ProblemList from '../common/ProblemList';
 import { VisualizationCanvas } from './VisualizationCanvas';
 
@@ -23,9 +22,8 @@ export function AlgorithmLesson({
   quiz,
   summary
 }) {
-  const { activeSnapshot, totalSteps, isPlaying } = engine;
+  const { activeSnapshot, totalSteps } = engine;
   
-  const [activeQuiz, setActiveQuiz] = useState(0);
   const [quizScore, setQuizScore] = useState(null);
   const [selectedAnswers, setSelectedAnswers] = useState({});
 
@@ -40,173 +38,181 @@ export function AlgorithmLesson({
   const instructor = activeSnapshot?.instructor || {};
 
   return (
-    <div className="flex flex-col gap-8 mb-16 border-b border-[var(--border-subtle)] pb-16">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', marginBottom: '64px', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '64px' }}>
       
       {/* 1. Introduction & 2. Analogy */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="lesson-intro-grid">
         <div className="card">
-           <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-             <BookOpen className="text-indigo-400" /> {title}
+           <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.5rem', fontWeight: 'bold', color: 'white', marginBottom: '16px' }}>
+             <BookOpen style={{ color: '#818cf8' }} /> {title}
            </h2>
-           <p className="text-[var(--text-muted)] leading-relaxed">{introduction}</p>
+           <p style={{ color: 'var(--text-muted)', lineHeight: '1.6' }}>{introduction}</p>
         </div>
-        <div className="card bg-gradient-to-br from-amber-500/10 to-orange-500/5 border-amber-500/20">
-           <h3 className="text-lg font-bold text-amber-400 mb-3 flex items-center gap-2">
+        <div className="card" style={{ background: 'linear-gradient(to bottom right, rgba(245, 158, 11, 0.1), rgba(249, 115, 22, 0.05))', borderColor: 'rgba(245, 158, 11, 0.2)' }}>
+           <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.125rem', fontWeight: 'bold', color: '#fbbf24', marginBottom: '12px' }}>
              <Lightbulb size={20} /> Real-World Analogy
            </h3>
-           <p className="text-amber-100/70 leading-relaxed">{analogy}</p>
+           <p style={{ color: 'rgba(253, 230, 138, 0.7)', lineHeight: '1.6' }}>{analogy}</p>
         </div>
       </div>
 
       {/* 3. Problem Statement */}
-      <div className="card border-l-4 border-l-indigo-500">
-        <h3 className="text-lg font-bold text-white mb-2">Problem Statement</h3>
-        <p className="text-[var(--text-muted)]">{problemStatement}</p>
+      <div className="card" style={{ borderLeft: '4px solid var(--accent-primary)' }}>
+        <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: 'white', marginBottom: '8px' }}>Problem Statement</h3>
+        <p style={{ color: 'var(--text-muted)' }}>{problemStatement}</p>
       </div>
 
       {/* Interactive Storytelling Experience Container */}
-      <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+      <div className="lesson-main-grid">
         
         {/* Main Canvas */}
-        <div className="xl:col-span-3 flex flex-col">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           {/* 4. Visualization & 5. Step-by-step animation */}
-          <div className="card !p-0 overflow-hidden bg-[var(--bg-elevated)] border border-[var(--border-subtle)] shadow-2xl flex-1 flex flex-col">
+          <div className="card" style={{ padding: 0, overflow: 'hidden', background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)', display: 'flex', flexDirection: 'column', minHeight: '400px' }}>
             
             <VisualizationCanvas>
                {totalSteps > 0 && renderVisualization(activeSnapshot)}
             </VisualizationCanvas>
             
             {/* Controls block */}
-            <div className="p-4 bg-black/40 border-b border-t border-[var(--border-subtle)] flex flex-col gap-3">
+            <div style={{ padding: '16px', background: 'rgba(0, 0, 0, 0.4)', borderBottom: '1px solid var(--border-subtle)', borderTop: '1px solid var(--border-subtle)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                <AnimationControls engine={engine} />
-               <div className="flex items-center justify-center gap-4 text-[10px] uppercase font-bold tracking-widest text-[var(--text-muted)]">
-                 <span className="flex items-center gap-1"><Keyboard size={12}/> Shortcuts:</span>
-                 <span><kbd className="bg-white/10 px-1.5 py-0.5 rounded border border-white/20">SPACE</kbd> Play/Pause</span>
-                 <span><kbd className="bg-white/10 px-1.5 py-0.5 rounded border border-white/20">←</kbd> <kbd className="bg-white/10 px-1.5 py-0.5 rounded border border-white/20">→</kbd> Step</span>
+               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '0.1em', color: 'var(--text-muted)' }}>
+                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Keyboard size={12}/> Shortcuts:</span>
+                 <span><kbd style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '2px 6px', borderRadius: '4px', border: '1px solid rgba(255, 255, 255, 0.2)' }}>SPACE</kbd> Play/Pause</span>
+                 <span><kbd style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '2px 6px', borderRadius: '4px', border: '1px solid rgba(255, 255, 255, 0.2)' }}>←</kbd> <kbd style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '2px 6px', borderRadius: '4px', border: '1px solid rgba(255, 255, 255, 0.2)' }}>→</kbd> Step</span>
                </div>
             </div>
 
             {/* 6. Code walkthrough & 7. Variable explanation */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-[var(--border-subtle)]">
-              <div className="lg:col-span-2 p-6 font-mono text-[13px] bg-[#0d1117] overflow-x-auto relative">
-                 <div className="absolute top-4 right-4 text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] flex items-center gap-2">
+            <div className="lesson-code-grid">
+              <div style={{ padding: '24px', fontFamily: 'monospace', fontSize: '13px', backgroundColor: '#0d1117', overflowX: 'auto', position: 'relative', flex: 2 }}>
+                 <div style={{ position: 'absolute', top: '16px', right: '16px', fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <Code2 size={14}/> Live Execution
                  </div>
-                 <pre className="text-gray-300 leading-loose">
+                 <pre style={{ color: '#d1d5db', lineHeight: '2' }}>
                    {codeString.split('\n').map((line, idx) => {
                      const isHighlighted = activeSnapshot?.payload?.line === idx + 1;
                      return (
-                       <div key={idx} className={`px-4 py-0.5 -mx-4 rounded transition-colors ${isHighlighted ? 'bg-indigo-500/20 border-l-2 border-indigo-400 text-indigo-300' : 'border-l-2 border-transparent'}`}>
-                         <span className="text-gray-600 mr-4 select-none">{idx + 1}</span>
+                       <div key={idx} style={{ padding: '2px 16px', marginLeft: '-16px', marginRight: '-16px', borderRadius: '4px', transition: 'background-color 0.2s', display: 'flex', backgroundColor: isHighlighted ? 'rgba(99, 102, 241, 0.2)' : 'transparent', borderLeft: isHighlighted ? '2px solid #818cf8' : '2px solid transparent', color: isHighlighted ? '#a5b4fc' : 'inherit' }}>
+                         <span style={{ color: '#4b5563', marginRight: '16px', userSelect: 'none', width: '20px', textAlign: 'right' }}>{idx + 1}</span>
                          {line}
                        </div>
                      )
                    })}
                  </pre>
               </div>
-              <div className="p-6 bg-black/20">
-                 <h4 className="text-sm font-bold text-white mb-4 flex items-center gap-2 uppercase tracking-wider">
-                   <Variable size={16} className="text-pink-400"/> Variables Snapshot
+              
+              <div style={{ padding: '24px', backgroundColor: 'rgba(0, 0, 0, 0.2)', flex: 1 }}>
+                 <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.875rem', fontWeight: 'bold', color: 'white', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '16px' }}>
+                   <Variable size={16} style={{ color: '#ec4899' }}/> Variables Snapshot
                  </h4>
-                 <div className="flex flex-col gap-3">
-                   {variables.map((v, i) => (
-                     <div key={i} className="flex justify-between items-center p-3 rounded-lg bg-white/5 border border-white/5">
-                       <div>
-                         <span className="font-mono text-pink-400 font-bold">{v.name}</span>
-                         <p className="text-[10px] text-[var(--text-muted)] mt-1 uppercase tracking-wider">{v.desc}</p>
+                 
+                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                   {variables.map((v, i) => {
+                     const val = activeSnapshot?.payload?.vars?.[v.name];
+                     const hasValue = val !== undefined && val !== null;
+                     
+                     return (
+                       <div key={i} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)', paddingBottom: '12px' }}>
+                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                           <span style={{ fontFamily: 'monospace', fontWeight: 'bold', color: '#f472b6' }}>{v.name}</span>
+                           <span style={{ fontFamily: 'monospace', fontSize: '0.875rem', fontWeight: 'bold', color: hasValue ? '#38bdf8' : '#6b7280' }}>
+                             {hasValue ? (typeof val === 'object' ? JSON.stringify(val) : String(val)) : '—'}
+                           </span>
+                         </div>
+                         <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{v.description}</div>
                        </div>
-                       <div className="font-mono text-white text-lg font-bold bg-black/50 px-3 py-1 rounded">
-                         {activeSnapshot?.payload?.vars?.[v.name] ?? '-'}
-                       </div>
-                     </div>
-                   ))}
+                     )
+                   })}
                  </div>
               </div>
             </div>
+            
           </div>
         </div>
 
         {/* Live Instructor Panel (Storytelling Sidebar) */}
-        <div className="xl:col-span-1">
-           <div className="card h-full bg-gradient-to-b from-indigo-950/40 to-black/40 border-indigo-500/20 sticky top-24 flex flex-col gap-6">
+        <div>
+           <div className="card" style={{ height: '100%', background: 'linear-gradient(to bottom, rgba(49, 46, 129, 0.2), rgba(0, 0, 0, 0.4))', borderColor: 'rgba(99, 102, 241, 0.2)', position: 'sticky', top: '96px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
              
-             <div className="flex items-center gap-3 border-b border-white/10 pb-4">
-                <div className="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center">
-                  <GraduationCap className="text-indigo-400" size={24} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-white leading-tight">Live Professor</h3>
-                  <p className="text-xs text-indigo-300 font-medium">Synchronized Teaching</p>
-                </div>
-             </div>
-             
-             <AnimatePresence mode="wait">
-               <motion.div 
-                 key={engine.currentStep}
-                 initial={{ opacity: 0, x: 20 }}
-                 animate={{ opacity: 1, x: 0 }}
-                 exit={{ opacity: 0, x: -20 }}
-                 transition={{ duration: 0.2 }}
-                 className="flex-1 flex flex-col gap-5"
-               >
-                 
-                 {/* What & Why Bubble */}
-                 <div className="relative bg-white/5 border border-white/10 rounded-xl p-4 text-sm shadow-lg">
-                    {/* Speech pointer */}
-                    <div className="absolute -left-2 top-4 w-4 h-4 bg-white/5 border-l border-t border-white/10 rotate-[-45deg]" />
-                    <strong className="text-white block mb-1 text-base">{activeSnapshot?.message || "Standing by..."}</strong>
-                    {instructor.what && (
-                      <p className="text-indigo-200/80 mt-3 flex gap-2 items-start"><span className="text-indigo-400 font-bold">What:</span> {instructor.what}</p>
-                    )}
-                    {instructor.why && (
-                      <p className="text-indigo-200/80 mt-2 flex gap-2 items-start"><span className="text-indigo-400 font-bold">Why:</span> {instructor.why}</p>
-                    )}
+             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)', paddingBottom: '16px' }}>
+                 <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(99, 102, 241, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                   <GraduationCap style={{ color: '#818cf8' }} size={24} />
                  </div>
+                 <div>
+                   <h3 style={{ fontWeight: 'bold', color: 'white', lineHeight: '1.2' }}>Live Professor</h3>
+                   <p style={{ fontSize: '0.75rem', color: '#a5b4fc', fontWeight: '500' }}>Synchronized Teaching</p>
+                 </div>
+              </div>
+              
+              <AnimatePresence mode="wait">
+                <motion.div 
+                  key={engine.currentStep}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.2 }}
+                  style={{ display: 'flex', flexDirection: 'column', gap: '20px', flex: 1 }}
+                >
+                  
+                  {/* What & Why Bubble */}
+                  <div style={{ position: 'relative', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '12px', padding: '16px', fontSize: '14px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.3)' }}>
+                     {/* Speech pointer */}
+                     <div style={{ position: 'absolute', left: '-8px', top: '16px', width: '16px', height: '16px', background: 'rgba(15, 23, 42, 0.8)', borderLeft: '1px solid rgba(255, 255, 255, 0.1)', borderTop: '1px solid rgba(255, 255, 255, 0.1)', transform: 'rotate(-45deg)' }} />
+                     <strong style={{ color: 'white', display: 'block', marginBottom: '4px', fontSize: '1rem' }}>{activeSnapshot?.message || "Standing by..."}</strong>
+                     {instructor.what && (
+                       <p style={{ color: 'rgba(199, 210, 254, 0.8)', marginTop: '12px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}><span style={{ color: '#818cf8', fontWeight: 'bold' }}>What:</span> {instructor.what}</p>
+                     )}
+                     {instructor.why && (
+                       <p style={{ color: 'rgba(199, 210, 254, 0.8)', marginTop: '8px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}><span style={{ color: '#818cf8', fontWeight: 'bold' }}>Why:</span> {instructor.why}</p>
+                     )}
+                  </div>
 
-                 {/* Warning / Common Mistake */}
-                 {instructor.warning && (
-                   <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl p-4 text-sm flex gap-3 items-start">
-                     <AlertTriangle className="text-rose-400 shrink-0" size={18} />
-                     <div>
-                       <strong className="text-rose-200 block mb-1">Common Mistake</strong>
-                       <p className="text-rose-200/70">{instructor.warning}</p>
-                     </div>
-                   </div>
-                 )}
+                  {/* Warning / Common Mistake */}
+                  {instructor.warning && (
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '12px', padding: '16px', fontSize: '14px' }}>
+                      <AlertTriangle style={{ color: '#f87171', flexShrink: 0 }} size={18} />
+                      <div>
+                        <strong style={{ color: '#fecdd3', display: 'block', marginBottom: '4px' }}>Common Mistake</strong>
+                        <p style={{ color: 'rgba(254, 205, 211, 0.7)' }}>{instructor.warning}</p>
+                      </div>
+                    </div>
+                  )}
 
-                 {/* Interview Tip / Optimization */}
-                 {instructor.tip && (
-                   <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 text-sm flex gap-3 items-start">
-                     <Flame className="text-amber-400 shrink-0" size={18} />
-                     <div>
-                       <strong className="text-amber-200 block mb-1">Interview Tip</strong>
-                       <p className="text-amber-200/70">{instructor.tip}</p>
-                     </div>
-                   </div>
-                 )}
-                 
-               </motion.div>
-             </AnimatePresence>
-             
-           </div>
-        </div>
+                  {/* Interview Tip / Optimization */}
+                  {instructor.tip && (
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.2)', borderRadius: '12px', padding: '16px', fontSize: '14px' }}>
+                      <Flame style={{ color: '#fbbf24', flexShrink: 0 }} size={18} />
+                      <div>
+                        <strong style={{ color: '#fde68a', display: 'block', marginBottom: '4px' }}>Interview Tip</strong>
+                        <p style={{ color: 'rgba(253, 230, 138, 0.7)' }}>{instructor.tip}</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                </motion.div>
+              </AnimatePresence>
+              
+            </div>
+         </div>
 
       </div>
 
       {/* 8. Complexity Analysis */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-        <div className="card flex items-center gap-4 border-l-4 border-l-emerald-500">
-           <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-400"><Zap size={24}/></div>
+      <div className="lesson-complexity-grid mt-6">
+        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '16px', borderLeft: '4px solid var(--success)' }}>
+           <div style={{ padding: '12px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '12px', color: '#34d399' }}><Zap size={24}/></div>
            <div>
-             <h4 className="text-xs uppercase tracking-wider text-[var(--text-muted)] font-bold mb-1">Time Complexity</h4>
-             <p className="text-2xl font-mono font-bold text-white">{complexity.time}</p>
+             <h4 style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', fontWeight: 'bold', marginBottom: '4px' }}>Time Complexity</h4>
+             <p style={{ fontSize: '1.5rem', fontFamily: 'monospace', fontWeight: 'bold', color: 'white' }}>{complexity.time}</p>
            </div>
         </div>
-        <div className="card flex items-center gap-4 border-l-4 border-l-blue-500">
-           <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400"><Cpu size={24}/></div>
+        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '16px', borderLeft: '4px solid var(--info)' }}>
+           <div style={{ padding: '12px', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '12px', color: '#60a5fa' }}><Cpu size={24}/></div>
            <div>
-             <h4 className="text-xs uppercase tracking-wider text-[var(--text-muted)] font-bold mb-1">Space Complexity</h4>
-             <p className="text-2xl font-mono font-bold text-white">{complexity.space}</p>
+             <h4 style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', fontWeight: 'bold', marginBottom: '4px' }}>Space Complexity</h4>
+             <p style={{ fontSize: '1.5rem', fontFamily: 'monospace', fontWeight: 'bold', color: 'white' }}>{complexity.space}</p>
            </div>
         </div>
       </div>
@@ -214,8 +220,8 @@ export function AlgorithmLesson({
       {/* 9. Interactive Practice */}
       {practiceProblems && (
         <div className="card">
-          <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-            <Target className="text-rose-400" /> Practice Integration
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'white', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Target style={{ color: '#f87171' }} /> Practice Integration
           </h2>
           <ProblemList problems={practiceProblems} />
         </div>
@@ -223,30 +229,31 @@ export function AlgorithmLesson({
 
       {/* 10. Quiz */}
       {quiz && (
-        <div className="card bg-indigo-950/20 border-indigo-500/20">
-          <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-            <HelpCircle className="text-indigo-400" /> Knowledge Check
+        <div className="card" style={{ background: 'rgba(49, 46, 129, 0.1)', borderColor: 'rgba(99, 102, 241, 0.2)' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'white', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <HelpCircle style={{ color: '#818cf8' }} /> Knowledge Check
           </h2>
           
           {quizScore !== null ? (
-            <div className="text-center py-8">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-400 mb-4">
-                <span className="text-3xl font-bold">{quizScore}/{quiz.length}</span>
+            <div style={{ textAlign: 'center', padding: '32px 0' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.2)', color: '#34d399', marginBottom: '16px' }}>
+                <span style={{ fontSize: '1.875rem', fontWeight: 'bold' }}>{quizScore}/{quiz.length}</span>
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Quiz Completed!</h3>
-              <button onClick={() => {setQuizScore(null); setSelectedAnswers({});}} className="text-indigo-400 hover:text-indigo-300 text-sm font-semibold mt-4 underline">Try Again</button>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'white', marginBottom: '8px' }}>Quiz Completed!</h3>
+              <button onClick={() => {setQuizScore(null); setSelectedAnswers({});}} style={{ background: 'none', border: 'none', color: '#818cf8', cursor: 'pointer', textDecoration: 'underline', fontSize: '0.875rem', fontWeight: '600', marginTop: '16px' }}>Try Again</button>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               {quiz.map((q, i) => (
-                <div key={i} className="space-y-3">
-                  <p className="font-medium text-white">{i + 1}. {q.question}</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <p style={{ fontWeight: '500', color: 'white' }}>{i + 1}. {q.question}</p>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
                     {q.options.map((opt, j) => (
                       <button 
                         key={j}
                         onClick={() => setSelectedAnswers(prev => ({...prev, [i]: j}))}
                         className={`p-3 text-left rounded-lg border transition-colors ${selectedAnswers[i] === j ? 'bg-indigo-500/20 border-indigo-500 text-indigo-200' : 'bg-black/20 border-[var(--border-subtle)] text-[var(--text-muted)] hover:bg-white/5'}`}
+                        style={{ padding: '12px', textAlign: 'left', borderRadius: '8px', transition: 'all 0.2s', cursor: 'pointer' }}
                       >
                         {opt}
                       </button>
@@ -257,7 +264,8 @@ export function AlgorithmLesson({
               <button 
                 onClick={handleQuizSubmit}
                 disabled={Object.keys(selectedAnswers).length < quiz.length}
-                className="btn btn-primary w-full py-3 mt-4 disabled:opacity-50"
+                className="btn btn-primary"
+                style={{ width: '100%', padding: '12px', marginTop: '16px', opacity: Object.keys(selectedAnswers).length < quiz.length ? 0.5 : 1 }}
               >
                 Submit Answers
               </button>
@@ -267,11 +275,11 @@ export function AlgorithmLesson({
       )}
 
       {/* 11. Summary */}
-      <div className="card bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border-emerald-500/20">
-        <h3 className="text-lg font-bold text-emerald-400 mb-2 flex items-center gap-2">
+      <div className="card" style={{ background: 'linear-gradient(to right, rgba(16, 185, 129, 0.1), rgba(20, 184, 166, 0.1))', borderColor: 'rgba(16, 185, 129, 0.2)' }}>
+        <h3 style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#34d399', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <CheckCircle2 /> Key Takeaways
         </h3>
-        <p className="text-emerald-100/80 leading-relaxed font-medium">{summary}</p>
+        <p style={{ color: 'rgba(209, 250, 229, 0.8)', lineHeight: '1.6', fontWeight: '500' }}>{summary}</p>
       </div>
 
     </div>

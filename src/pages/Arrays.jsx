@@ -117,7 +117,7 @@ function BinarySearchLesson() {
     const isDone = snapshot.event === ANIMATION_EVENTS.COMPLETE;
     
     return (
-      <div className="flex flex-wrap justify-center gap-2 relative min-h-[80px]">
+      <div className="viz-boxes" style={{ position: 'relative', minHeight: '100px', display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap', padding: '30px 0' }}>
         <AnimatePresence>
           {snapshot.state.map((val, i) => {
             const isMid = vars?.mid === i;
@@ -131,7 +131,8 @@ function BinarySearchLesson() {
                 key={i} 
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: isEliminated ? 0.2 : 1 }}
-                className={`relative w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg transition-colors duration-300 ${
+                style={{ position: 'relative' }}
+                className={`viz-box ${
                   isFound ? 'bg-emerald-500/20 text-emerald-400 border-2 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]' :
                   isMid ? 'bg-amber-500/20 text-amber-400 border-2 border-amber-500/50' :
                   inRange ? 'bg-indigo-500/10 text-white border border-indigo-500/30' :
@@ -142,18 +143,63 @@ function BinarySearchLesson() {
                 
                 {/* Pointers */}
                 {vars?.lo === i && !isFound && (
-                  <motion.div layoutId="lo-ptr" className="absolute -bottom-7 text-[10px] font-bold text-indigo-400 flex flex-col items-center">
-                    <ChevronRight className="-rotate-90" size={14} /> LO
+                  <motion.div
+                    layoutId="lo-ptr"
+                    style={{
+                      position: 'absolute',
+                      bottom: '-28px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      fontSize: '10px',
+                      fontWeight: 'bold',
+                      color: '#818cf8',
+                      lineHeight: '1'
+                    }}
+                  >
+                    <ChevronRight style={{ transform: 'rotate(-90deg)' }} size={14} /> LO
                   </motion.div>
                 )}
                 {vars?.hi === i && !isFound && (
-                  <motion.div layoutId="hi-ptr" className="absolute -top-7 text-[10px] font-bold text-indigo-400 flex flex-col items-center">
-                    HI <ChevronRight className="rotate-90" size={14} />
+                  <motion.div
+                    layoutId="hi-ptr"
+                    style={{
+                      position: 'absolute',
+                      top: '-28px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      fontSize: '10px',
+                      fontWeight: 'bold',
+                      color: '#818cf8',
+                      lineHeight: '1'
+                    }}
+                  >
+                    HI <ChevronRight style={{ transform: 'rotate(90deg)' }} size={14} />
                   </motion.div>
                 )}
                 {isMid && !isFound && (
-                  <motion.div layoutId="mid-ptr" className="absolute -bottom-7 text-[10px] font-bold text-amber-400 flex flex-col items-center">
-                    <ChevronRight className="-rotate-90" size={14} /> MID
+                  <motion.div
+                    layoutId="mid-ptr"
+                    style={{
+                      position: 'absolute',
+                      bottom: '-28px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      fontSize: '10px',
+                      fontWeight: 'bold',
+                      color: '#fbbf24',
+                      lineHeight: '1'
+                    }}
+                  >
+                    <ChevronRight style={{ transform: 'rotate(-90deg)' }} size={14} /> MID
                   </motion.div>
                 )}
               </motion.div>
@@ -259,7 +305,7 @@ function ReverseStringLesson() {
     const isDone = snapshot.event === ANIMATION_EVENTS.COMPLETE;
     
     return (
-      <div className="flex flex-wrap justify-center gap-2 relative min-h-[80px]">
+      <div className="viz-boxes" style={{ position: 'relative', minHeight: '100px', display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap', padding: '30px 0' }}>
         <AnimatePresence>
           {snapshot.state.map((char, i) => {
             const isLeft = vars?.left === i;
@@ -272,7 +318,8 @@ function ReverseStringLesson() {
                 key={i} 
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className={`relative w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg transition-colors duration-300 ${
+                style={{ position: 'relative' }}
+                className={`viz-box ${
                   isDone ? 'bg-emerald-500/20 text-emerald-400 border-2 border-emerald-500/50' :
                   isSwapping ? 'bg-amber-500/20 text-amber-400 border-2 border-amber-500/50' :
                   (isLeft || isRight) ? 'bg-indigo-500/20 text-indigo-400 border-2 border-indigo-500/50' :
@@ -283,13 +330,43 @@ function ReverseStringLesson() {
                 
                 {/* Pointers */}
                 {isLeft && !isDone && (
-                  <motion.div layoutId="left-ptr" className="absolute -bottom-7 text-[10px] font-bold text-indigo-400 flex flex-col items-center">
-                    <ChevronRight className="-rotate-90" size={14} /> L
+                  <motion.div
+                    layoutId="left-ptr"
+                    style={{
+                      position: 'absolute',
+                      bottom: '-28px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      fontSize: '10px',
+                      fontWeight: 'bold',
+                      color: '#818cf8',
+                      lineHeight: '1'
+                    }}
+                  >
+                    <ChevronRight style={{ transform: 'rotate(-90deg)' }} size={14} /> L
                   </motion.div>
                 )}
                 {isRight && !isDone && (
-                  <motion.div layoutId="right-ptr" className="absolute -top-7 text-[10px] font-bold text-indigo-400 flex flex-col items-center">
-                    R <ChevronRight className="rotate-90" size={14} />
+                  <motion.div
+                    layoutId="right-ptr"
+                    style={{
+                      position: 'absolute',
+                      top: '-28px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      fontSize: '10px',
+                      fontWeight: 'bold',
+                      color: '#818cf8',
+                      lineHeight: '1'
+                    }}
+                  >
+                    R <ChevronRight style={{ transform: 'rotate(90deg)' }} size={14} />
                   </motion.div>
                 )}
               </motion.div>
@@ -308,7 +385,7 @@ function ReverseStringLesson() {
       problemStatement="Write a function that reverses a string. The input string is given as an array of characters s. You must do this by modifying the input array in-place with O(1) extra memory."
       engine={engine}
       renderVisualization={renderArray}
-      codeString={\`def reverseString(s):\n    left, right = 0, len(s) - 1\n    while left < right:\n        s[left], s[right] = s[right], s[left]\n        left += 1\n        right -= 1\`}
+      codeString={`def reverseString(s):\n    left, right = 0, len(s) - 1\n    while left < right:\n        s[left], s[right] = s[right], s[left]\n        left += 1\n        right -= 1`}
       variables={[
         {name: 'left', desc: 'Left pointer'},
         {name: 'right', desc: 'Right pointer'}

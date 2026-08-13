@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ZoomIn, ZoomOut, Maximize, Minimize, Move, Download, Share2, Bookmark } from 'lucide-react';
 
 /**
@@ -33,41 +33,126 @@ export function VisualizationCanvas({ children }) {
     return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
   }, []);
 
+  const buttonStyle = {
+    padding: '6px',
+    color: '#9ca3af',
+    background: 'transparent',
+    border: 'none',
+    cursor: 'pointer',
+    borderRadius: '6px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'all 0.2s'
+  };
+
+  const actionButtonStyle = {
+    padding: '6px',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    color: '#9ca3af',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+  };
+
   return (
     <div 
       ref={containerRef}
-      className={`relative flex flex-col flex-1 w-full bg-[#0B0F19] overflow-hidden ${
-        isFullscreen ? 'fixed inset-0 z-50 h-screen bg-black' : 'rounded-t-xl min-h-[350px]'
-      }`}
+      style={{
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        backgroundColor: '#0B0F19',
+        overflow: 'hidden',
+        minHeight: '380px',
+        borderTopLeftRadius: '12px',
+        borderTopRightRadius: '12px',
+        ...(isFullscreen ? {
+          position: 'fixed',
+          inset: 0,
+          zIndex: 9999,
+          height: '100vh',
+          backgroundColor: 'black'
+        } : {})
+      }}
     >
-      {/* Floating Toolbar */}
-      <div className="absolute top-4 right-4 z-20 flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/10 p-1.5 rounded-xl shadow-2xl">
-        <div className="flex items-center gap-1 border-r border-white/10 pr-2 mr-1">
-          <button onClick={handleZoomOut} className="p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors" title="Zoom Out">
+      {/* Floating Zoom/Fullscreen Toolbar */}
+      <div 
+        style={{
+          position: 'absolute',
+          top: '16px',
+          right: '16px',
+          zIndex: 20,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          backgroundColor: 'rgba(0, 0, 0, 0.4)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          padding: '6px',
+          borderRadius: '12px',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', borderRight: '1px solid rgba(255, 255, 255, 0.1)', paddingRight: '8px', marginRight: '4px' }}>
+          <button onClick={handleZoomOut} style={buttonStyle} title="Zoom Out">
             <ZoomOut size={16} />
           </button>
-          <span className="text-xs font-mono font-bold text-gray-300 w-9 text-center">{Math.round(scale * 100)}%</span>
-          <button onClick={handleZoomIn} className="p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors" title="Zoom In">
+          <span style={{ fontSize: '12px', fontFamily: 'monospace', fontWeight: 'bold', color: '#d1d5db', width: '36px', textAlign: 'center' }}>
+            {Math.round(scale * 100)}%
+          </span>
+          <button onClick={handleZoomIn} style={buttonStyle} title="Zoom In">
             <ZoomIn size={16} />
           </button>
-          <button onClick={handleReset} className="p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors" title="Reset View">
+          <button onClick={handleReset} style={buttonStyle} title="Reset View">
             <Move size={16} />
           </button>
         </div>
-        <button onClick={toggleFullscreen} className="p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors" title="Toggle Fullscreen">
+        <button onClick={toggleFullscreen} style={buttonStyle} title="Toggle Fullscreen">
           {isFullscreen ? <Minimize size={16} /> : <Maximize size={16} />}
         </button>
       </div>
 
       {/* Social / Export Stub Toolbar */}
-      <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
-        <button className="flex items-center gap-2 px-3 py-1.5 bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 border border-indigo-500/30 rounded-lg text-xs font-bold transition-colors shadow-lg">
+      <div 
+        style={{
+          position: 'absolute',
+          top: '16px',
+          left: '16px',
+          zIndex: 20,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}
+      >
+        <button 
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '6px 12px',
+            backgroundColor: 'rgba(99, 102, 241, 0.2)',
+            color: '#a5b4fc',
+            border: '1px solid rgba(99, 102, 241, 0.3)',
+            borderRadius: '8px',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s'
+          }}
+          title="Download GIF or Video"
+        >
           <Download size={14} /> GIF/Video
         </button>
-        <button className="p-1.5 bg-black/40 text-gray-400 hover:text-white border border-white/10 rounded-lg transition-colors shadow-lg">
+        <button style={actionButtonStyle} title="Share Visualizer">
           <Share2 size={14} />
         </button>
-        <button className="p-1.5 bg-black/40 text-gray-400 hover:text-amber-400 border border-white/10 rounded-lg transition-colors shadow-lg">
+        <button style={actionButtonStyle} title="Bookmark Lesson">
           <Bookmark size={14} />
         </button>
       </div>
@@ -77,19 +162,32 @@ export function VisualizationCanvas({ children }) {
         drag
         dragConstraints={containerRef}
         dragElastic={0.2}
-        className="flex-1 w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing"
+        style={{
+          flex: 1,
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'grab'
+        }}
       >
         <motion.div 
           animate={{ scale }}
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          className="relative flex items-center justify-center"
+          style={{
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
         >
           {children}
         </motion.div>
       </motion.div>
       
       {/* Background Decor */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.05)_0%,transparent_70%)]" />
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'radial-gradient(ellipse at center, rgba(99, 102, 241, 0.05) 0%, transparent 70%)' }} />
     </div>
   );
 }
