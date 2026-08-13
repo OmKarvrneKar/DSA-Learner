@@ -71,6 +71,72 @@ int main() {
 }`
 }
 
+const PROBLEMS = [
+  {
+    title: 'Two Sum',
+    difficulty: 'Easy',
+    desc: 'Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.',
+    input: '[2, 7, 11, 15]\n9',
+    code: `// Two Sum
+function twoSum(nums, target) {
+  const map = new Map();
+  for (let i = 0; i < nums.length; i++) {
+    const complement = target - nums[i];
+    if (map.has(complement)) return [map.get(complement), i];
+    map.set(nums[i], i);
+  }
+  return [];
+}
+
+// Test
+const nums = [2, 7, 11, 15];
+const target = 9;
+console.log("Result:", twoSum(nums, target));`
+  },
+  {
+    title: 'Valid Parentheses',
+    difficulty: 'Easy',
+    desc: 'Given a string s containing just the characters brackets, determine if the input string is valid.',
+    input: '"()[]{}"',
+    code: `// Valid Parentheses
+function isValid(s) {
+  const stack = [];
+  const map = { ')': '(', '}': '{', ']': '[' };
+  for (let char of s) {
+    if (char === '(' || char === '{' || char === '[') {
+      stack.push(char);
+    } else {
+      if (stack.pop() !== map[char]) return false;
+    }
+  }
+  return stack.length === 0;
+}
+
+// Test
+console.log("Is valid '()[]{}':", isValid("()[]{}"));
+console.log("Is valid '(]':", isValid("(]"));`
+  },
+  {
+    title: 'Maximum Subarray (Kadane)',
+    difficulty: 'Medium',
+    desc: 'Find the contiguous subarray which has the largest sum and return its sum.',
+    input: '[-2, 1, -3, 4, -1, 2, 1, -5, 4]',
+    code: `// Maximum Subarray
+function maxSubArray(nums) {
+  let maxSoFar = nums[0];
+  let maxEndingHere = nums[0];
+  for (let i = 1; i < nums.length; i++) {
+    maxEndingHere = Math.max(nums[i], maxEndingHere + nums[i]);
+    maxSoFar = Math.max(maxSoFar, maxEndingHere);
+  }
+  return maxSoFar;
+}
+
+// Test
+console.log("Max sum:", maxSubArray([-2, 1, -3, 4, -1, 2, 1, -5, 4]));`
+  }
+]
+
 const REPLIT_URLS = {
   Python: 'https://replit.com/languages/python3',
   'C++': 'https://replit.com/languages/cpp',
@@ -82,6 +148,92 @@ const THEMES = [
   { id: 'hc-black', label: 'High Contrast' }
 ]
 
+function analyzeComplexity(codeString) {
+  const lines = codeString.split('\n');
+  let hasLoops = false;
+  let maxNestLevel = 0;
+  let currentNest = 0;
+  let hasLogarithmic = false;
+  let hasRecursion = false;
+  let hasMapOrSet = false;
+  let hasArrays = false;
+
+  const funcMatch = codeString.match(/(?:function\s+(\w+)|const\s+(\w+)\s*=\s*(?:\([^)]*\)|[^=]*)\s*=>)/g);
+  const funcNames = [];
+  if (funcMatch) {
+    funcMatch.forEach(m => {
+      const name = m.replace(/function\s+|const\s+|=.*/g, '').trim();
+      if (name && name !== 'console') funcNames.push(name);
+    });
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (line.startsWith('//') || line.startsWith('/*') || line.startsWith('*')) continue;
+
+    if (line.match(/\b(for|while)\b/)) {
+      hasLoops = true;
+      currentNest++;
+      if (currentNest > maxNestLevel) maxNestLevel = currentNest;
+    }
+    
+    if (line.includes('}') && currentNest > 0) {
+      currentNest--;
+    }
+
+    if (line.match(/(\/\/\s*|log|\/=\s*2|\/=\s*2|lo\s*=\s*mid|hi\s*=\s*mid|>>=1)/)) {
+      hasLogarithmic = true;
+    }
+
+    if (line.match(/\b(new\s+Map|new\s+Set|\[\]|\{\})\b/)) {
+      hasMapOrSet = true;
+    }
+    if (line.match(/\bnew\s+Array|\[.*\]\b/)) {
+      hasArrays = true;
+    }
+
+    funcNames.forEach(name => {
+      const regex = new RegExp(`\\b${name}\\s*\\(`, 'g');
+      const matches = line.match(regex);
+      if (matches && (line.includes('return') || line.includes('=')) && !line.includes('function') && !line.includes('=>')) {
+        hasRecursion = true;
+      }
+    });
+  }
+
+  let timeComplexity = 'O(1)';
+  let spaceComplexity = 'O(1)';
+  let explanation = [];
+
+  if (hasRecursion) {
+    timeComplexity = 'O(2ⁿ) or O(N)';
+    spaceComplexity = 'O(N) (call stack depth)';
+    explanation.push('Found recursive calls. Depending on branch factor, time complexity is exponential O(2^N) or linear O(N). Space complexity is O(N) due to the call stack.');
+  } else if (maxNestLevel >= 2) {
+    timeComplexity = 'O(N²)';
+    explanation.push(`Detected nested loops (depth: ${maxNestLevel}). Each loop processes elements linearly, yielding quadratic O(N^2) time complexity.`);
+  } else if (maxNestLevel === 1) {
+    if (hasLogarithmic) {
+      timeComplexity = 'O(log N)';
+      explanation.push('Detected binary division logic within the loop structure. Time complexity is logarithmic O(log N).');
+    } else {
+      timeComplexity = 'O(N)';
+      explanation.push('Detected a single loop. Time complexity is linear O(N).');
+    }
+  } else {
+    explanation.push('No loops or recursion detected in key code blocks. Execution executes in constant time O(1).');
+  }
+
+  if (hasMapOrSet || hasArrays) {
+    spaceComplexity = 'O(N)';
+    explanation.push('Instantiates dynamic data structures (Map, Set, or Array) whose size grows with input, resulting in linear space O(N).');
+  } else {
+    explanation.push('Only auxiliary primitive variables used. Space complexity remains constant O(1).');
+  }
+
+  return { timeComplexity, spaceComplexity, explanation };
+}
+
 export default function Playground() {
   const [lang, setLang] = useState('JavaScript')
   const [code, setCode] = useState(TEMPLATES.JavaScript)
@@ -92,7 +244,8 @@ export default function Playground() {
   const [copied, setCopied] = useState(false)
   const [theme, setTheme] = useState('vs-dark')
   const [isFullscreen, setIsFullscreen] = useState(false)
-  const [activeTab, setActiveTab] = useState('output') // 'output', 'input', 'problems'
+  const [activeTab, setActiveTab] = useState('output')
+  const [complexityResult, setComplexityResult] = useState(null)
 
   useEffect(() => {
     const handleEsc = (e) => {
@@ -107,6 +260,7 @@ export default function Playground() {
     setCode(TEMPLATES[l])
     setOutput('')
     setErrorMsg('')
+    setComplexityResult(null)
     setActiveTab('output')
   }
 
@@ -114,6 +268,7 @@ export default function Playground() {
     setCode(TEMPLATES[lang])
     setOutput('')
     setErrorMsg('')
+    setComplexityResult(null)
   }
 
   function runCode() {
@@ -122,6 +277,10 @@ export default function Playground() {
     setOutput('')
     setErrorMsg('')
     setActiveTab('output')
+
+    // Complexity analysis
+    const analysis = analyzeComplexity(code)
+    setComplexityResult(analysis)
 
     setTimeout(() => {
       const logs = []
@@ -138,7 +297,7 @@ export default function Playground() {
         fn(fakeConsole, input)
         const end = performance.now()
         
-        let out = logs.join('\\n') || '(no output)'
+        let out = logs.join('\n') || '(no output)'
         out += `\n\n✨ Execution finished in ${(end - start).toFixed(2)}ms`
         setOutput(out)
       } catch (e) {
@@ -146,7 +305,7 @@ export default function Playground() {
         setActiveTab('problems')
       }
       setRunning(false)
-    }, 150) // Fake slight delay for better UX feel
+    }, 150)
   }
 
   function copyCode() {
@@ -169,7 +328,7 @@ export default function Playground() {
             </div>
             <h1 className="text-2xl font-bold text-white brand-font">Code Playground</h1>
           </div>
-          <p className="text-[var(--text-muted)] text-sm">Write, execute, and debug your code in a fully featured environment.</p>
+          <p className="text-[var(--text-muted)] text-sm">Write, execute, analyze complexity, and debug your code in a fully featured environment.</p>
         </div>
       )}
 
@@ -184,6 +343,32 @@ export default function Playground() {
               <Cpu size={14} /> {l}
             </button>
           ))}
+          
+          <select 
+            onChange={(e) => {
+              const val = e.target.value;
+              if (val) {
+                const prob = PROBLEMS.find(p => p.title === val);
+                if (prob) {
+                  setCode(prob.code);
+                  setInput(prob.input);
+                  setOutput('');
+                  setErrorMsg('');
+                  setComplexityResult(null);
+                  setLang('JavaScript');
+                }
+              }
+            }}
+            className="bg-black/20 border border-[var(--border-subtle)] rounded-lg px-3 py-1.5 text-xs text-[var(--text-muted)] outline-none hover:border-[var(--border-strong)] transition-colors cursor-pointer"
+            defaultValue=""
+          >
+            <option value="" disabled>Select Problem Preset</option>
+            {PROBLEMS.map(p => (
+              <option key={p.title} value={p.title}>
+                {p.title} ({p.difficulty})
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="flex items-center gap-2 ml-auto">
@@ -258,6 +443,7 @@ export default function Playground() {
             {[
               { id: 'output', icon: Terminal, label: 'Output' },
               { id: 'input', icon: FileJson, label: 'Input' },
+              { id: 'complexity', icon: Cpu, label: 'Big-O' },
               { id: 'problems', icon: AlertCircle, label: 'Problems', dot: !!errorMsg }
             ].map(t => (
               <button key={t.id}
@@ -301,6 +487,73 @@ export default function Playground() {
                     placeholder="Enter input here...&#10;Accessible via the 'input' variable in JavaScript."
                     spellCheck="false"
                   />
+                </motion.div>
+              )}
+
+              {activeTab === 'complexity' && (
+                <motion.div key="comp" initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="h-full flex flex-col gap-4 text-white">
+                  {complexityResult ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                      <div style={{ display: 'flex', gap: '12px' }}>
+                        <div style={{ flex: 1, padding: '12px', borderRadius: '12px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', textAlign: 'center' }}>
+                          <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Time Complexity</div>
+                          <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#60a5fa' }}>{complexityResult.timeComplexity}</div>
+                        </div>
+                        <div style={{ flex: 1, padding: '12px', borderRadius: '12px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', textAlign: 'center' }}>
+                          <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Space Complexity</div>
+                          <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#34d399' }}>{complexityResult.spaceComplexity}</div>
+                        </div>
+                      </div>
+
+                      <div style={{ padding: '12px', borderRadius: '12px', background: 'rgba(59, 130, 246, 0.05)', border: '1px solid rgba(59, 130, 246, 0.2)', fontSize: '13px', lineHeight: '1.6', color: '#93c5fd' }}>
+                        <strong style={{ display: 'block', marginBottom: '6px', fontSize: '12px', color: 'white' }}>Analysis Breakdown:</strong>
+                        <ul style={{ paddingLeft: '16px', margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          {complexityResult.explanation.map((exp, i) => (
+                            <li key={i}>{exp}</li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* SVG Chart */}
+                      <div style={{ padding: '12px', borderRadius: '12px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
+                        <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Growth Curve Comparison</div>
+                        <svg viewBox="0 0 100 60" style={{ width: '100%', height: '120px', overflow: 'visible' }}>
+                          {/* Grid lines */}
+                          <line x1="10" y1="50" x2="95" y2="50" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
+                          <line x1="10" y1="10" x2="10" y2="50" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
+                          
+                          {/* O(1) - Constant */}
+                          <path d="M 10 45 L 95 45" fill="none" stroke={complexityResult.timeComplexity.includes('1') ? '#3b82f6' : 'rgba(255,255,255,0.15)'} strokeWidth={complexityResult.timeComplexity.includes('1') ? '2' : '0.8'} strokeDasharray={complexityResult.timeComplexity.includes('1') ? '0' : '2 2'} />
+                          <text x="97" y="47" fill="rgba(255,255,255,0.4)" fontSize="3">O(1)</text>
+
+                          {/* O(log N) - Logarithmic */}
+                          <path d="M 10 50 Q 30 35 95 30" fill="none" stroke={complexityResult.timeComplexity.includes('log') ? '#3b82f6' : 'rgba(255,255,255,0.15)'} strokeWidth={complexityResult.timeComplexity.includes('log') ? '2' : '0.8'} strokeDasharray={complexityResult.timeComplexity.includes('log') ? '0' : '2 2'} />
+                          <text x="97" y="32" fill="rgba(255,255,255,0.4)" fontSize="3">O(log N)</text>
+
+                          {/* O(N) - Linear */}
+                          <path d="M 10 50 L 95 15" fill="none" stroke={complexityResult.timeComplexity.includes('N') && !complexityResult.timeComplexity.includes('²') ? '#3b82f6' : 'rgba(255,255,255,0.15)'} strokeWidth={complexityResult.timeComplexity.includes('N') && !complexityResult.timeComplexity.includes('²') ? '2' : '0.8'} strokeDasharray={complexityResult.timeComplexity.includes('N') && !complexityResult.timeComplexity.includes('²') ? '0' : '2 2'} />
+                          <text x="97" y="17" fill="rgba(255,255,255,0.4)" fontSize="3">O(N)</text>
+
+                          {/* O(N^2) - Quadratic */}
+                          <path d="M 10 50 Q 40 45 90 5" fill="none" stroke={complexityResult.timeComplexity.includes('²') ? '#3b82f6' : 'rgba(255,255,255,0.15)'} strokeWidth={complexityResult.timeComplexity.includes('²') ? '2' : '0.8'} strokeDasharray={complexityResult.timeComplexity.includes('²') ? '0' : '2 2'} />
+                          <text x="92" y="7" fill="rgba(255,255,255,0.4)" fontSize="3">O(N²)</text>
+                        </svg>
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '8px', fontSize: '10px' }}>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <span style={{ width: '8px', height: '8px', background: '#3b82f6', borderRadius: '50%' }}></span> Your Code
+                          </span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--text-muted)' }}>
+                            <span style={{ width: '8px', height: '2px', background: 'rgba(255,255,255,0.15)', borderStyle: 'dashed' }}></span> Benchmarks
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-[var(--text-muted)] flex flex-col items-center justify-center h-full gap-3 opacity-50">
+                      <Cpu size={32} />
+                      <p>Run code to calculate complexity</p>
+                    </div>
+                  )}
                 </motion.div>
               )}
 
