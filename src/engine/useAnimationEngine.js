@@ -65,6 +65,12 @@ export function useAnimationEngine(snapshots = [], defaultSpeed = 500) {
     }
   }, [totalSteps, currentStep]);
 
+  // Reset when snapshots changes (e.g. custom user input simulation)
+  useEffect(() => {
+    setCurrentStep(0);
+    setIsPlaying(false);
+  }, [snapshots]);
+
   // Keyboard Shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {

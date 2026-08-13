@@ -108,8 +108,36 @@ const BINARY_SEARCH_ARR = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91];
 const BINARY_SEARCH_TARGET = 23;
 
 function BinarySearchLesson() {
-  const timeline = useMemo(() => generateBinarySearchTimeline(BINARY_SEARCH_ARR, BINARY_SEARCH_TARGET), []);
+  const [arrayInput, setArrayInput] = useState('2, 5, 8, 12, 16, 23, 38, 56, 72, 91');
+  const [targetInput, setTargetInput] = useState('23');
+  const [currentParams, setCurrentParams] = useState({
+    array: [2, 5, 8, 12, 16, 23, 38, 56, 72, 91],
+    target: 23
+  });
+
+  const timeline = useMemo(() => generateBinarySearchTimeline(currentParams.array, currentParams.target), [currentParams]);
   const engine = useAnimationEngine(timeline, 800);
+
+  const handleApply = (e) => {
+    e?.preventDefault();
+    const arr = arrayInput
+      .split(',')
+      .map(x => x.trim())
+      .filter(x => x !== '')
+      .map(Number)
+      .filter(x => !isNaN(x));
+    
+    // Sort array as binary search requires sorted array
+    arr.sort((a, b) => a - b);
+    
+    // Update array input field to show sorted order
+    setArrayInput(arr.join(', '));
+    
+    const tgt = Number(targetInput.trim());
+    if (isNaN(tgt)) return;
+
+    setCurrentParams({ array: arr, target: tgt });
+  };
 
   const renderArray = (snapshot) => {
     if (!snapshot) return null;
@@ -123,7 +151,7 @@ function BinarySearchLesson() {
             const isMid = vars?.mid === i;
             const inRange = i >= vars?.lo && i <= vars?.hi;
             const isEliminated = !inRange && !isDone;
-            const isFound = isDone && val === BINARY_SEARCH_TARGET && isMid; // hacky check for found
+            const isFound = isDone && val === currentParams.target && isMid; // hacky check for found
             
             return (
               <motion.div 
@@ -210,6 +238,38 @@ function BinarySearchLesson() {
     );
   };
 
+  const customControls = (
+    <form onSubmit={handleApply} style={{ display: 'flex', alignItems: 'center', gap: '16px', width: '100%', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1, minWidth: '200px' }}>
+        <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Array (Sorted)</label>
+        <input 
+          type="text" 
+          value={arrayInput}
+          onChange={(e) => setArrayInput(e.target.value)}
+          placeholder="e.g. 2, 5, 8, 12, 16"
+          style={{ padding: '8px 12px', background: 'rgba(0, 0, 0, 0.4)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: 'white', fontSize: '14px', outline: 'none' }}
+        />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '100px' }}>
+        <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Target</label>
+        <input 
+          type="text" 
+          value={targetInput}
+          onChange={(e) => setTargetInput(e.target.value)}
+          placeholder="23"
+          style={{ padding: '8px 12px', background: 'rgba(0, 0, 0, 0.4)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: 'white', fontSize: '14px', outline: 'none', textAlign: 'center' }}
+        />
+      </div>
+      <button 
+        type="submit" 
+        className="btn btn-primary"
+        style={{ padding: '10px 20px', alignSelf: 'flex-end', height: '40px' }}
+      >
+        Simulate
+      </button>
+    </form>
+  );
+
   return (
     <AlgorithmLesson 
       title="Binary Search"
@@ -230,6 +290,7 @@ function BinarySearchLesson() {
         { question: 'What is the maximum number of steps required to find an element in an array of size 16?', options: ['16', '8', '4', '5'], correct: 3 }
       ]}
       summary="By continuously halving the search space, Binary Search achieves logarithmic time complexity. It is the gold standard for searching static, sorted data."
+      customControls={customControls}
     />
   )
 }
@@ -296,8 +357,18 @@ function generateReverseStringTimeline(str) {
 const REVERSE_STRING_INPUT = "ALGORITHM";
 
 function ReverseStringLesson() {
-  const timeline = useMemo(() => generateReverseStringTimeline(REVERSE_STRING_INPUT), []);
+  const [stringInput, setStringInput] = useState('ALGORITHM');
+  const [currentStr, setCurrentStr] = useState('ALGORITHM');
+
+  const timeline = useMemo(() => generateReverseStringTimeline(currentStr), [currentStr]);
   const engine = useAnimationEngine(timeline, 800);
+
+  const handleApplyStr = (e) => {
+    e?.preventDefault();
+    const cleanStr = stringInput.trim();
+    if (!cleanStr) return;
+    setCurrentStr(cleanStr);
+  };
 
   const renderArray = (snapshot) => {
     if (!snapshot) return null;
@@ -377,6 +448,28 @@ function ReverseStringLesson() {
     );
   };
 
+  const customControls = (
+    <form onSubmit={handleApplyStr} style={{ display: 'flex', alignItems: 'center', gap: '16px', width: '100%', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1, minWidth: '200px' }}>
+        <label style={{ fontSize: '11px', fontWeight: 'bold', color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Input String</label>
+        <input 
+          type="text" 
+          value={stringInput}
+          onChange={(e) => setStringInput(e.target.value)}
+          placeholder="e.g. ALGORITHM"
+          style={{ padding: '8px 12px', background: 'rgba(0, 0, 0, 0.4)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: 'white', fontSize: '14px', outline: 'none' }}
+        />
+      </div>
+      <button 
+        type="submit" 
+        className="btn btn-primary"
+        style={{ padding: '10px 20px', alignSelf: 'flex-end', height: '40px' }}
+      >
+        Simulate
+      </button>
+    </form>
+  );
+
   return (
     <AlgorithmLesson 
       title="Reverse String (Two Pointers)"
@@ -396,6 +489,7 @@ function ReverseStringLesson() {
         { question: 'When does the loop terminate?', options: ['When left > right', 'When left >= right', 'When the string is empty', 'When left == right - 1'], correct: 1 }
       ]}
       summary="The two-pointer technique allows us to process elements from both ends simultaneously, reducing time and space complexity."
+      customControls={customControls}
     />
   )
 }

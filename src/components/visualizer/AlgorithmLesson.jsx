@@ -20,7 +20,8 @@ export function AlgorithmLesson({
   complexity,
   practiceProblems,
   quiz,
-  summary
+  summary,
+  customControls
 }) {
   const { activeSnapshot, totalSteps } = engine;
   
@@ -67,6 +68,14 @@ export function AlgorithmLesson({
         
         {/* Main Canvas */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          
+          {/* Custom Simulation Controls */}
+          {customControls && (
+            <div className="card" style={{ padding: '16px', display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', background: 'rgba(255, 255, 255, 0.02)', borderColor: 'var(--border-subtle)' }}>
+              {customControls}
+            </div>
+          )}
+
           {/* 4. Visualization & 5. Step-by-step animation */}
           <div className="card" style={{ padding: 0, overflow: 'hidden', background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)', display: 'flex', flexDirection: 'column', minHeight: '400px' }}>
             
