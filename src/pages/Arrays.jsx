@@ -188,11 +188,149 @@ function BinarySearchLesson() {
   )
 }
 
+// ==========================================
+// TWO POINTERS (REVERSE STRING) LOGIC & GENERATOR
+// ==========================================
+function generateReverseStringTimeline(str) {
+  const arr = str.split('');
+  const api = new VisualizerAPI(arr);
+  let left = 0;
+  let right = arr.length - 1;
+
+  api.customEvent(ANIMATION_EVENTS.START, { line: 2, vars: { left, right } }, null, 
+    `Initial string: "${str}"`,
+    {
+      what: "Setting up two pointers: 'left' at the start and 'right' at the end.",
+      why: "We swap characters from the outside inwards.",
+      tip: "Two pointers is a common technique for array and string problems."
+    }
+  );
+
+  while (left < right) {
+    api.customEvent(ANIMATION_EVENTS.COMPARE, { line: 3, vars: { left, right } }, null, 
+      `Preparing to swap '${arr[left]}' and '${arr[right]}'`,
+      {
+        what: `Looking at characters at index ${left} and ${right}.`
+      }
+    );
+    
+    // Swap using API
+    const temp = arr[left];
+    arr[left] = arr[right];
+    arr[right] = temp;
+    api.swap(left, right, 
+      `Swapped! String is now: "${arr.join('')}"`,
+      {
+        what: "Characters swapped successfully."
+      }
+    );
+
+    left++;
+    right--;
+
+    api.customEvent(ANIMATION_EVENTS.MOVE_POINTER, { line: 4, vars: { left, right } }, null, 
+      `Moved left to ${left}, right to ${right}`,
+      {
+        what: "Moved pointers inwards."
+      }
+    );
+  }
+
+  api.customEvent(ANIMATION_EVENTS.COMPLETE, { line: 5, vars: { left, right } }, null, 
+    `✅ Reversal complete! Result: "${arr.join('')}"`,
+    {
+      what: "Pointers have crossed. Reversal is finished.",
+      tip: "Time complexity: O(n), Space complexity: O(1)."
+    }
+  );
+
+  return api.getTimeline();
+}
+
+const REVERSE_STRING_INPUT = "ALGORITHM";
+
+function ReverseStringLesson() {
+  const timeline = useMemo(() => generateReverseStringTimeline(REVERSE_STRING_INPUT), []);
+  const engine = useAnimationEngine(timeline, 800);
+
+  const renderArray = (snapshot) => {
+    if (!snapshot) return null;
+    const { vars } = snapshot.payload;
+    const isDone = snapshot.event === ANIMATION_EVENTS.COMPLETE;
+    
+    return (
+      <div className="flex flex-wrap justify-center gap-2 relative min-h-[80px]">
+        <AnimatePresence>
+          {snapshot.state.map((char, i) => {
+            const isLeft = vars?.left === i;
+            const isRight = vars?.right === i;
+            const isSwapping = (snapshot.event === ANIMATION_EVENTS.SWAP || snapshot.event === ANIMATION_EVENTS.COMPARE) && (isLeft || isRight);
+            
+            return (
+              <motion.div 
+                layout
+                key={i} 
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className={`relative w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg transition-colors duration-300 ${
+                  isDone ? 'bg-emerald-500/20 text-emerald-400 border-2 border-emerald-500/50' :
+                  isSwapping ? 'bg-amber-500/20 text-amber-400 border-2 border-amber-500/50' :
+                  (isLeft || isRight) ? 'bg-indigo-500/20 text-indigo-400 border-2 border-indigo-500/50' :
+                  'bg-white/5 text-[var(--text-muted)] border border-transparent'
+                }`}
+              >
+                {char}
+                
+                {/* Pointers */}
+                {isLeft && !isDone && (
+                  <motion.div layoutId="left-ptr" className="absolute -bottom-7 text-[10px] font-bold text-indigo-400 flex flex-col items-center">
+                    <ChevronRight className="-rotate-90" size={14} /> L
+                  </motion.div>
+                )}
+                {isRight && !isDone && (
+                  <motion.div layoutId="right-ptr" className="absolute -top-7 text-[10px] font-bold text-indigo-400 flex flex-col items-center">
+                    R <ChevronRight className="rotate-90" size={14} />
+                  </motion.div>
+                )}
+              </motion.div>
+            )
+          })}
+        </AnimatePresence>
+      </div>
+    );
+  };
+
+  return (
+    <AlgorithmLesson 
+      title="Reverse String (Two Pointers)"
+      introduction="The Two Pointer technique is extremely useful for arrays and strings. A classic problem is reversing a string in-place."
+      analogy="Imagine two people standing at opposite ends of a line. They swap places, then step one pace towards each other, and repeat until they meet in the middle."
+      problemStatement="Write a function that reverses a string. The input string is given as an array of characters s. You must do this by modifying the input array in-place with O(1) extra memory."
+      engine={engine}
+      renderVisualization={renderArray}
+      codeString={\`def reverseString(s):\n    left, right = 0, len(s) - 1\n    while left < right:\n        s[left], s[right] = s[right], s[left]\n        left += 1\n        right -= 1\`}
+      variables={[
+        {name: 'left', desc: 'Left pointer'},
+        {name: 'right', desc: 'Right pointer'}
+      ]}
+      complexity={{time: 'O(n)', space: 'O(1)'}}
+      quiz={[
+        { question: 'Why is the space complexity O(1)?', options: ['It uses an extra array', 'It only uses two pointers for variables', 'Because strings are small', 'It modifies the DOM'], correct: 1 },
+        { question: 'When does the loop terminate?', options: ['When left > right', 'When left >= right', 'When the string is empty', 'When left == right - 1'], correct: 1 }
+      ]}
+      summary="The two-pointer technique allows us to process elements from both ends simultaneously, reducing time and space complexity."
+    />
+  )
+}
+
 export default function Arrays() {
   return (
     <div className="content">
       <TopicHeader topic="arrays" title="Arrays & Strings" subtitle="Interactive Lessons Powered by Animation Engine" icon={Box} />
-      <BinarySearchLesson />
+      <div className="flex flex-col gap-12">
+        <BinarySearchLesson />
+        <ReverseStringLesson />
+      </div>
     </div>
   )
 }
