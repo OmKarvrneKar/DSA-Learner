@@ -5,8 +5,9 @@ An interactive web application designed to help learners understand, visualize, 
 ## 🚀 Features
 
 - **Interactive Visualizations**: Understand complex algorithms through intuitive step-by-step visual representations.
-- **Custom Animation Engine**: A sophisticated engine tailored for smooth, step-by-step algorithmic visualizations.
-- **Integrated Code Editor**: Write and run your own algorithms directly in the browser (powered by Monaco Editor).
+- **Interactive Data Structure Simulators**: Play with dynamic representations of Arrays, Linked Lists, Stacks, Queues, and Trees with real-time operations (Insert, Delete, Search, Update).
+- **Big-O Complexity Analyzer**: Analyze JavaScript code on the fly to estimate Time and Space Complexity, complete with an interactive benchmark curve comparison.
+- **Code Playground with Presets**: Write and run your own algorithms directly in the browser (powered by Monaco Editor), featuring standard LeetCode problem templates.
 - **Learning Modules**: Structured learning paths to guide you from basic data structures to advanced algorithms.
 - **Modern & Fast**: Built with React and Vite for a blazing fast, responsive user experience.
 - **Seamless Navigation**: Smooth routing between different topics using React Router.
