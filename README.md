@@ -42,11 +42,7 @@ To run this project locally on your machine, follow these steps:
    ```
 
 4. **Open your browser:**
-   Navigate to `http://localhost:5173` (or the port specified in your terminal) to view the app.
-
-## 📝 License
-
-This project is open-source and available under the [MIT License](LICENSE).
+   Navigate to `http://localhost:5173` (or the port specified in your terminal) to view the app
 
 ---
 **Author**: Omkar Vernekar  
