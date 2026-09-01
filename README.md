@@ -42,8 +42,8 @@ To run this project locally on your machine, follow these steps:
    ```
 
 4. **Open your browser:**
-   Navigate to `http://localhost:5173` (or the port specified in your terminal) to view the app.
+   Navigate to `http://localhost:5173` (or the port specified in your terminal) to view the app
 ---
 **Author**: Omkar Vernekar  
-GitHub: [@OmKarvrneKar](https://github.com/OmKarvrneKar)
+GitHub: [@OmKarvrneKar](https://github.com/OmKarvrneKar) 
 
