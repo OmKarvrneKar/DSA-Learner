@@ -1,4 +1,4 @@
-# DSA-Learner 🧠🚀
+# DSA-Learner 🧠
 
 An interactive web application designed to help learners understand, visualize, and practice Data Structures and Algorithms (DSA) through hands-on examples and an integrated code editor.
 
